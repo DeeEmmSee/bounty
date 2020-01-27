@@ -2,7 +2,7 @@
 //import useSWR from 'swr';
 import axios from 'axios';
 
-export async function GetBounty(author){
+export async function GetBounty(bountyId){
     //const { data, error } = useSWR(`/api/bounties/bounty${author ? '?author=' + author : ''}`, get);
     //const { data, error } = useSWR([`/api/bounties/bounty`, author], get);
 
@@ -27,49 +27,29 @@ export async function GetBounty(author){
         return err;
     });*/
 
-    return await axios.get('http://localhost:3000/api/bounties/bounty')
-    .then(function (res){
-        return res.data;
-    })
-    .catch(function(err){
-        console.log(err);
-        return err;
-    });
+    let res = await axios.get('http://localhost:3001/api/bounties/bounty', {params: {'bountyId': bountyId}});
+    let { data } = res.data;
+    return data;
 }
 
 export async function GetRecentlyAdded(author){
-    return await axios.get('http://localhost:3000/api/bounties/recentlyadded')
-    .then(function (res){
-        return res.data;
-    })
-    .catch(function(err){
-        console.log(err);
-        return err;
-    });
+    let res = await axios.get('http://localhost:3001/api/bounties/recentlyadded');
+    let { data } = res.data;
+    return data;
 }
 
 export async function GetRecentlyClaimed(author){
-    return await axios.get('http://localhost:3000/api/bounties/recentlyclaimed')
-    .then(function (res){
-        return res.data;
-    })
-    .catch(function(err){
-        console.log(err);
-        return err;
-    });
+    let res = await axios.get('http://localhost:3001/api/bounties/recentlyclaimed');
+    let { data } = res.data;
+    return data;
 }
 
 export async function GetFeatured(author){
-    return await axios.get('http://localhost:3000/api/bounties/featured')
-    .then(function (res){
-        return res.data;
-    })
-    .catch(function(err){
-        console.log(err);
-        return err;
-    });
+    let res = await axios.get('http://localhost:3001/api/bounties/featured');
+    let { data } = res.data;
+    return data;
 }
 
-export default function APIFunctions() {
+// export default function APIFunctions() {
     
-}
+// }
