@@ -1,33 +1,41 @@
 //import React from 'react';
 import Link from 'next/link';
+import { GetRecentlyClaimed as RecentlyClaimedFunc } from '../library/APIFunctions';
 
 class RecentlyClaimed extends React.Component {
     constructor(props){
         super(props);
-        this.items = [];
-        this.loaded = false;
-        
+        this.state = {
+            items: [],
+            loaded: false
+        };
+
         this.GetBounties();
     }
-
     GetBounties(){
-        this.loaded = false;
-        // TODO
-        this.items = [{'ID': '4','Title': 'Test4', 'CreatedDate': '2020-01-04', 'TotalAmount':'4'}, {'ID': '3','Title': 'Test3', 'CreatedDate': '2020-01-03', 'TotalAmount':'3'}];
-        this.loaded = true;
-    }
+        this.state.loaded = false;        
+        let ra = this;
 
+        RecentlyClaimedFunc()
+        .then(res => {
+            ra.setState((state) => { return {items: res.data, loaded: true} });
+        })
+        .catch(err => {
+            console.log(err);
+            ra.setState({loaded: true});
+        });
+    }
     render() {
-        const latestBounties = this.items.map((bounty, key) =>
-            <tr style={{cursor: 'pointer'}} key={key}>
+        const latestBounties = this.state.items.map((bounty, key) =>
+        <tr style={{cursor: 'pointer'}} key={key}>
                 <td><Link href={'/bounties/bounty/' + bounty.ID}><a>{bounty.Title}</a></Link></td>
                 <td><Link href={'/bounties/bounty/' + bounty.ID}><a>${bounty.TotalAmount}</a></Link></td>
                 <td><Link href={'/bounties/bounty/' + bounty.ID}><a>{bounty.CreatedDate}</a></Link></td>
             </tr>
         );
 
-        const tableStruct = (
-            this.items.length > 0 ? <table className="table table-striped table-hover">
+       const tableStruct = (
+            this.state.items.length > 0 ? <table className="table table-striped table-hover">
                 <thead className="thead-light">
                     <tr>
                         <th>Name</th>
@@ -43,7 +51,7 @@ class RecentlyClaimed extends React.Component {
         
         return (
             <div>
-               { this.loaded ? tableStruct : <span>Loading...</span> }
+               { this.state.loaded ? tableStruct : <span>Loading...</span> }
              </div>
         );
     }

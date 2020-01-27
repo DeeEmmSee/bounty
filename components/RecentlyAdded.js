@@ -5,29 +5,28 @@ import { GetRecentlyAdded as RecentlyAddedFunc } from '../library/APIFunctions';
 class RecentlyAdded extends React.Component {
     constructor(props){
         super(props);
-        this.items = [];
-        this.loaded = false;
+        this.state = {
+            items: [],
+            loaded: false
+        };
 
         this.GetBounties();
-        
     }
     GetBounties(){
-        this.loaded = false;
-        //this.items = [{'ID': '1', 'Title': 'Test1', 'CreatedDate': '2020-01-01', 'TotalAmount':'1'}, {'ID': '2','Title': 'Test2', 'CreatedDate': '2020-01-02', 'TotalAmount':'2'}];
-        //this.loaded = true;
+        this.state.loaded = false;
+        let ra = this;
 
         RecentlyAddedFunc()
-        .then(data => {
-            this.items = data;
-            this.loaded = true;
+        .then(res => {
+            ra.setState((state) => { return {items: res.data, loaded: true} });
         })
         .catch(err => {
             console.log(err);
-            this.loaded = true;
-        })
+            ra.setState({loaded: true});
+        });
     }
     render() {
-        const latestBounties = this.items.map((bounty, key) =>
+        const latestBounties = this.state.items.map((bounty, key) =>
         <tr style={{cursor: 'pointer'}} key={key}>
                 <td><Link href={'/bounties/bounty/' + bounty.ID}><a>{bounty.Title}</a></Link></td>
                 <td><Link href={'/bounties/bounty/' + bounty.ID}><a>${bounty.TotalAmount}</a></Link></td>
@@ -36,7 +35,7 @@ class RecentlyAdded extends React.Component {
         );
 
        const tableStruct = (
-            this.items.length > 0 ? <table className="table table-striped table-hover">
+            this.state.items.length > 0 ? <table className="table table-striped table-hover">
                 <thead className="thead-light">
                     <tr>
                         <th>Name</th>
@@ -52,7 +51,7 @@ class RecentlyAdded extends React.Component {
         
         return (
             <div>
-               { this.loaded ? tableStruct : <span>Loading...</span> }
+               { this.state.loaded ? tableStruct : <span>Loading...</span> }
              </div>
         );
     }
