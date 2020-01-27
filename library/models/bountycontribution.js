@@ -1,5 +1,5 @@
 // MySQL
-import sql from '../models/sql.js';
+const sql = require('../models/sql.js');
 
 class BountyContribution{
     constructor(obj){
@@ -67,4 +67,4 @@ BountyContribution.createBountyContribution = function(bountyContribution) {
     });
 };
 
-export default BountyContribution;
+module.exports = BountyContribution;

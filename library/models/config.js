@@ -1,4 +1,4 @@
-const Config = {
+module.exports = {
     "port": 3000,
     //"appEndpoint": "http://localhost:3600",
     //"apiEndpoint": "http://localhost:3600",
@@ -7,5 +7,3 @@ const Config = {
     "environment": "dev",
     "expiry_length": 300000 // 5 minutes 604800000 // 7 days
 }
-
-export default Config;

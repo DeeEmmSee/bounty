@@ -1,5 +1,5 @@
 // MySQL
-import sql from '../models/sql.js';
+const sql = require('../models/sql.js');
 
 class Game{
     constructor(obj){
@@ -37,4 +37,4 @@ Game.getAllGames = function() {
     });
 };
 
-export default Game;
+module.exports = Game;

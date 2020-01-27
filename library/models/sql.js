@@ -1,4 +1,4 @@
-import mysql from 'sql';
+var mysql = require('mysql');
 
 //local mysql db connection
 var con = mysql.createConnection({
@@ -28,4 +28,4 @@ con.connect(function(err) {
     if (err) throw err;
 });
 
-export default con;
+module.exports = con;

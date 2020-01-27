@@ -1,5 +1,5 @@
 // MySQL
-import sql from '../models/sql.js';
+const sql = require('../models/sql.js');
 
 class User{
     constructor(obj){
@@ -95,4 +95,4 @@ User.updateUser = function(user) {
     });
 }*/
 
-export default User;
+module.exports = User;
