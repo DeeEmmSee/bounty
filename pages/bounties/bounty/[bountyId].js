@@ -4,26 +4,35 @@ import axios from 'axios';
 class BountyPage extends React.Component {
     constructor(props){
         super(props);
-        this.loaded = false;
-        this.bounty = null;
-
-        this.GetBounty(this.props.router.query.bountyId);
+        this.state = {
+            loaded: false,
+            bounty: null,
+            errorMsg: ""
+        };
+        let router = withRouter();
+        
+        this.GetBounty(router.query.bountyId);
     }
-    
+        
+    getInitialProps(){
+        return {"test": null};
+    }
+
     GetBounty(bountyId){
         this.loaded = false;
-        this.bounty = {'ID': bountyId};
         this.loaded = true;
-
+        let bountyPage = this;
         
-        axios.get('/api/bounties/bounty?bountyId=' + id)
+        console.log(this.props.router.query.bountyId);
+        console.log(bountyId);
+
+        axios.get('/api/bounties/bounty?bountyId=' + bountyId)
         .then(function(response) {
-            //vue_bounty.loaded = true;
-            //vue_bounty.bounty = response.data;
+            bountyPage.setState((state) => { return {bounty: res.data, loaded: true} });
         })
         .catch(function(error) {
-           console.log(error);
-           //vue_bounty.errorMsg = error;
+           //console.log(error);
+           bountyPage.setState((state) => { return { loaded: true} });
         });
     }
 
@@ -32,6 +41,7 @@ class BountyPage extends React.Component {
             <div>
                 {this.props.router.query.bountyId}
                 ID: {this.bounty.ID}
+                Title: {this.bounty.Title}
             </div>
         );
     }
