@@ -55,6 +55,13 @@ export async function GetFeatured(){
     return axios.get(config.api_url + '/api/bounties/featured');
 }
 
+export async function RegisterUser(obj){
+    //let res = await axios.get('http://localhost:3001/api/bounties/featured');
+    //let { data } = res.data;
+    //return data;
+    return axios.post(config.api_url + '/api/users/user', obj);
+}
+
 // export default function APIFunctions() {
     
 // }
