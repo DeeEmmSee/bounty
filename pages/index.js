@@ -25,7 +25,7 @@ class Index extends React.Component {
             <Layout>
                 <div className="row">
                     <div className="col-sm-12">
-                        <h2 style={{"text-align": "center"}}>VideoGameBounties.com</h2>
+                        <h2 style={{"textAlign": "center"}}>VideoGameBounties.com</h2>
                     </div>
                 </div>
 

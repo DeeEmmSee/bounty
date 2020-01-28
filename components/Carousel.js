@@ -24,7 +24,7 @@ class Carousel extends React.Component {
         });
     }
     GoToBounty(bountyID){
-        window.location.href = '/bounties/bounty/' + bountyID
+        //document.location.href = '/bounties/bounty/' + bountyID
     }
     render() {
         // const latestBounties = this.state.items.map((bounty, key) =>
@@ -36,11 +36,11 @@ class Carousel extends React.Component {
         // );
 
         const carouselIndicators = this.state.items.map((bounty, key) =>
-            <li data-target="#myCarousel" data-slide-to={key} className={{'active' : key === 0}}></li>
+            <li data-target="#myCarousel" data-slide-to={key} className={{'active' : key === 0}} key={key}></li>
         );
 
         const carouselInner = this.state.items.map((bounty, key) =>
-            <div className={key === 0 ? 'carousel-item active' : 'carousel-item'} onClick={this.GoToBounty(bounty.ID)} style={{"cursor": "pointer"}}>
+            <div className={key === 0 ? 'carousel-item active' : 'carousel-item'} onClick={this.GoToBounty(bounty.ID)} style={{"cursor": "pointer"}} key={key}>
                 <img src={bounty.Image} alt="Los Angeles" />
                 <div className="carousel-caption">
                     <h3>{bounty.Title}</h3>
@@ -55,7 +55,7 @@ class Carousel extends React.Component {
              <div className="row">
                 <div className="col-sm-12">
                     <div id="myCarousel" className="carousel slide" data-ride="carousel">
-                        <ul>
+                        <ul className="carousel-indicators">
                             {carouselIndicators}
                         </ul>
                         <div className="carousel-inner">

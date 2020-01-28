@@ -6,25 +6,21 @@ class BountyPage extends React.Component {
         super(props);
         this.state = {
             loaded: false,
-            bounty: null,
+            bounty: {},
             errorMsg: ""
         };
-        let router = withRouter();
-        
-        this.GetBounty(router.query.bountyId);
+
+        this.GetBounty(this.props.router.query.bountyId);
     }
         
-    getInitialProps(){
-        return {"test": null};
+    static async getInitialProps(){
+        return {};
     }
 
     GetBounty(bountyId){
         this.loaded = false;
         this.loaded = true;
         let bountyPage = this;
-        
-        console.log(this.props.router.query.bountyId);
-        console.log(bountyId);
 
         axios.get('/api/bounties/bounty?bountyId=' + bountyId)
         .then(function(response) {
@@ -40,8 +36,8 @@ class BountyPage extends React.Component {
         return (
             <div>
                 {this.props.router.query.bountyId}
-                ID: {this.bounty.ID}
-                Title: {this.bounty.Title}
+                ID: {this.state.bounty.ID}
+                Title: {this.state.bounty.Title}
             </div>
         );
     }
