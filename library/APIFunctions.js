@@ -62,6 +62,13 @@ export async function RegisterUser(obj){
     return axios.post(config.api_url + '/api/users/user', obj);
 }
 
+export async function Login(obj){
+    //let res = await axios.get('http://localhost:3001/api/bounties/featured');
+    //let { data } = res.data;
+    //return data;
+    return axios.post(config.api_url + '/api/auth/login', obj);
+}
+
 // export default function APIFunctions() {
     
 // }

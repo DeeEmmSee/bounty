@@ -1,14 +1,37 @@
 import Link from 'next/link';
+import Cookies from 'universal-cookie';
 
 class NavBar extends React.Component {
     constructor(props){
         super(props);
+        const cookies = new Cookies();
+
+        let cookieObj = cookies.get("vgb_token");
+        let loggedIn = cookieObj != null && cookieObj != undefined;
+        
+        let leftItems = [
+            {"name": "", "href": "/"}
+        ];
+        let rightItems = [
+            {"name": "", "href": "/"}
+        ];
+
         this.state = {
-            loggedIn: false
+            loggedIn: loggedIn,
+            leftItems: leftItems,
+            rightItems: rightItems,
         };
     }
 
     render() {
+        const LeftItems = this.state.leftItems.map(() => {
+            <li key={}></li>
+        });
+
+        const RightItems = this.state.rightItems.map(() => {
+            <li key={}></li>
+        });
+
         return(
            <div className="row" style={{"marginLeft": "-30px", "marginRight": "-30px"}}>
                 <div className="col-sm-12">
@@ -20,22 +43,22 @@ class NavBar extends React.Component {
                         
                         <div className="navbar-collapse collapse" id="navbarSupportedContent">
                             <ul className="navbar-nav mr-auto">
-                            <li className="nav-item active">
-                                <Link href="/"><a className="nav-link">Home <span className="sr-only">(current)</span></a></Link>
-                            </li>
-                            { this.state.loggedIn ?
-                                <li cassName="nav-item" v-if="loggedIn">
-                                    <Link href="/create-bounty"><a className="nav-link">Create Bounty</a></Link>
-                                </li> : null
-                            }
-                            <li className="nav-item">
-                                <Link href="/bounties"><a className="nav-link">Bounties</a></Link>
-                            </li>
+                                <li className="nav-item active">
+                                    <Link href="/"><a className="nav-link">Home <span className="sr-only">(current)</span></a></Link>
+                                </li>
+                                <li className="nav-item">
+                                    <Link href="/bounties"><a className="nav-link">Bounties</a></Link>
+                                </li>
+                                { this.state.loggedIn &&
+                                   (<li className="nav-item">
+                                        <Link href="/create-bounty"><a className="nav-link">Create Bounty</a></Link>
+                                    </li>) 
+                                }
                             </ul>
                         </div>
                         <div className="text-right">
-                            { !this.state.loggedIn ?
-                                <ul className="navbar-nav mr-auto">
+                            { !this.state.loggedIn &&
+                                (<ul className="navbar-nav mr-auto">
                                     <li className="nav-item">
                                         <Link href="/register"><a className="nav-link">Register</a></Link>
                                     </li>
@@ -53,8 +76,7 @@ class NavBar extends React.Component {
                                             <a className="dropdown-item" href="#">Something else here</a>
                                         </div>
                                     </li> */}
-                                </ul>
-                                : null
+                                </ul>)
                             }
                         </div>
                     </nav>
