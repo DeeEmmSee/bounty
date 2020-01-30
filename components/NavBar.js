@@ -8,32 +8,48 @@ class NavBar extends React.Component {
 
         let cookieObj = cookies.get("vgb_token");
         let loggedIn = cookieObj != null && cookieObj != undefined;
-        
-        let leftItems = [
-            {"name": "", "href": "/"}
+
+        console.log(props.page);
+
+        let li = [
+            {"name": "Home", "href": "/", "class": "nav-item active", "active": true},
+            {"name": "Bounties", "href": "/bounties", "class": "nav-item", "active": true}
         ];
-        let rightItems = [
-            {"name": "", "href": "/"}
+        let ri = [
+            {"name": "Register", "href": "/register", "class": "nav-item", "active": true},
+            {"name": "Login", "href": "/login", "class": "nav-item", "active": true}
         ];
+
+        // check cookie
+        if (loggedIn) {
+            li.push({"name": "Create Bounty", "href": "/create-bounty", "class": "nav-item", "active": true});
+
+            ri = [];
+        }
 
         this.state = {
             loggedIn: loggedIn,
-            leftItems: leftItems,
-            rightItems: rightItems,
+            left: li,
+            right: ri
         };
     }
 
+
     render() {
-        const LeftItems = this.state.leftItems.map(() => {
-            <li key={}></li>
-        });
+        const List = ({items}) => (
+            <ul className="navbar-nav mr-auto">
+                {
+                    items.map((item, key) =>
+                        <li className={item.active ? 'nav-item active' : 'nav-item'}>
+                            <Link href={item.href}><a className="nav-link">{item.name}{item.active && <span className="sr-only">(current)</span>}</a></Link>
+                        </li>
+                    )
+                }
+            </ul>
+        );
 
-        const RightItems = this.state.rightItems.map(() => {
-            <li key={}></li>
-        });
-
-        return(
-           <div className="row" style={{"marginLeft": "-30px", "marginRight": "-30px"}}>
+        return (
+            <div className="row" style={{"marginLeft": "-30px", "marginRight": "-30px"}}>
                 <div className="col-sm-12">
                     <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
                         <a className="navbar-brand" href="/">VGB.com</a>
@@ -42,46 +58,15 @@ class NavBar extends React.Component {
                         </button>
                         
                         <div className="navbar-collapse collapse" id="navbarSupportedContent">
-                            <ul className="navbar-nav mr-auto">
-                                <li className="nav-item active">
-                                    <Link href="/"><a className="nav-link">Home <span className="sr-only">(current)</span></a></Link>
-                                </li>
-                                <li className="nav-item">
-                                    <Link href="/bounties"><a className="nav-link">Bounties</a></Link>
-                                </li>
-                                { this.state.loggedIn &&
-                                   (<li className="nav-item">
-                                        <Link href="/create-bounty"><a className="nav-link">Create Bounty</a></Link>
-                                    </li>) 
-                                }
-                            </ul>
+                            <List items={this.state.left} />
                         </div>
                         <div className="text-right">
-                            { !this.state.loggedIn &&
-                                (<ul className="navbar-nav mr-auto">
-                                    <li className="nav-item">
-                                        <Link href="/register"><a className="nav-link">Register</a></Link>
-                                    </li>
-                                    <li className="nav-item">
-                                        <Link href="/login"><a className="nav-link">Login</a></Link>
-                                    </li> 
-                                    {/* <li className="nav-item dropdown" v-if="!loggedIn">
-                                        <a className="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                            Login
-                                        </a>
-                                        <div className="dropdown-menu" aria-labelledby="navbarDropdown">
-                                            <a className="dropdown-item" href="#">Action</a>
-                                            <a className="dropdown-item" href="#">Another action</a>
-                                            <div className="dropdown-divider"></div>
-                                            <a className="dropdown-item" href="#">Something else here</a>
-                                        </div>
-                                    </li> */}
-                                </ul>)
-                            }
+                            <List items={this.state.right} />
                         </div>
                     </nav>
                 </div>
-            </div>           
+            </div>  
+
         );
     }
 }

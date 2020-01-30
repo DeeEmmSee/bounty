@@ -13,9 +13,9 @@ class BountyPage extends React.Component {
         this.GetBounty(this.props.router.query.bountyId);
     }
         
-    static async getInitialProps(){
+    /*static async getInitialProps(){
         return {};
-    }
+    }*/
 
     GetBounty(bountyId){
         this.loaded = false;
