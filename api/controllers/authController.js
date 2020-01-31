@@ -68,7 +68,7 @@ exports.login = (req, res) => {
         // Set access token into cookies
         //res.cookie("token", token, {expire: Date.now() + timeout}) // 7 days
 
-        res.status(201).send({accessToken: token, refreshToken: refreshToken});
+        res.status(201).send({accessToken: token, refreshToken: refreshToken, userId: req.body.userId});
     } catch (err) {
         console.log(err);
         res.status(500).send({errors: err});

@@ -25,12 +25,15 @@ class RecentlyAdded extends React.Component {
             ra.setState({loaded: true});
         });
     }
+    GoToBounty(bountyId){
+        window.location.href = '/bounties/' + bountyId;
+    }
     render() {
         const latestBounties = this.state.items.map((bounty, key) =>
-            <tr style={{cursor: 'pointer'}} key={key}>
-                <td><Link href={'/bounties/bounty/' + bounty.ID}><a>{bounty.Title}</a></Link></td>
-                <td><Link href={'/bounties/bounty/' + bounty.ID}><a>${bounty.TotalAmount}</a></Link></td>
-                <td><Link href={'/bounties/bounty/' + bounty.ID}><a>{bounty.CreatedDate}</a></Link></td>
+            <tr style={{cursor: 'pointer'}} key={key} onClick={this.GoToBounty.bind(this, bounty.ID)}>
+                <td>{bounty.Title}</td>
+                <td>${bounty.TotalAmount}</td>
+                <td>{bounty.CreatedDate}</td>
             </tr>
         );
 

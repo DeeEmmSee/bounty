@@ -69,6 +69,27 @@ export async function Login(obj){
     return axios.post(config.api_url + '/api/auth/login', obj);
 }
 
+export async function GetGameList(){
+    //let res = await axios.get('http://localhost:3001/api/bounties/featured');
+    //let { data } = res.data;
+    //return data;
+    return axios.get(config.api_url + '/api/games/all');
+}
+
+export async function SaveNewBounty(obj){
+    //let res = await axios.get('http://localhost:3001/api/bounties/featured');
+    //let { data } = res.data;
+    //return data;
+    return axios.post(config.api_url + '/api/bounties/bounty', obj);
+}
+
+export async function SaveNewBountyContribution(obj){
+    //let res = await axios.get('http://localhost:3001/api/bounties/featured');
+    //let { data } = res.data;
+    //return data;
+    return axios.post(config.api_url + '/api/bounties/bountycontribution', obj);
+}
+
 // export default function APIFunctions() {
     
 // }

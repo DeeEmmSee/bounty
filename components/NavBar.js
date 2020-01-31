@@ -9,24 +9,40 @@ class NavBar extends React.Component {
         let cookieObj = cookies.get("vgb_token");
         let loggedIn = cookieObj != null && cookieObj != undefined;
 
-        console.log(props.page);
-
         let li = [
-            {"name": "Home", "href": "/", "class": "nav-item active", "active": true},
-            {"name": "Bounties", "href": "/bounties", "class": "nav-item", "active": true}
+            {"name": "Home", "href": "/", "class": "nav-item active", "active": false},
+            {"name": "Bounties", "href": "/bounties", "class": "nav-item", "active": false}
         ];
         let ri = [
-            {"name": "Register", "href": "/register", "class": "nav-item", "active": true},
-            {"name": "Login", "href": "/login", "class": "nav-item", "active": true}
+            {"name": "Register", "href": "/register", "class": "nav-item", "active": false},
+            {"name": "Login", "href": "/login", "class": "nav-item", "active": false}
         ];
 
         // check cookie
         if (loggedIn) {
-            li.push({"name": "Create Bounty", "href": "/create-bounty", "class": "nav-item", "active": true});
+            li.push({"name": "Create Bounty", "href": "/create-bounty", "class": "nav-item", "active": false});
 
-            ri = [];
+            ri = [{"name": "Profile", "href": "/profile", "class": "nav-item", "active": false}];
         }
 
+        // Set active
+        let item = li.find((i) => {
+            return i.href === props.page;
+        });
+
+        if (item !== undefined) {
+            li[li.indexOf(item)].active = true;
+        }
+        else {
+            item = ri.find((i) => {
+                return i.href === props.page;
+            });
+
+            if (item !== undefined) {
+                ri[ri.indexOf(item)].active = true;
+            }
+        }
+       
         this.state = {
             loggedIn: loggedIn,
             left: li,
@@ -40,7 +56,7 @@ class NavBar extends React.Component {
             <ul className="navbar-nav mr-auto">
                 {
                     items.map((item, key) =>
-                        <li className={item.active ? 'nav-item active' : 'nav-item'}>
+                        <li key={key} className={item.active ? 'nav-item active' : 'nav-item'}>
                             <Link href={item.href}><a className="nav-link">{item.name}{item.active && <span className="sr-only">(current)</span>}</a></Link>
                         </li>
                     )

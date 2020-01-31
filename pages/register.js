@@ -23,7 +23,7 @@ class Register extends React.Component {
     
     SubmitRegistration(evt){
         evt.preventDefault();
-
+       
         this.setState((state) => { return {
             invalidPassword: false,
             invalidPasswordReason: "",

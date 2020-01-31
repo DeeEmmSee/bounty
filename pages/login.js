@@ -1,6 +1,7 @@
 import Layout from '../components/Layout';
 import Cookies from 'universal-cookie';
 import { Login as LoginFunc } from '../library/APIFunctions';
+import { SaveCookie as SaveCookieFunc } from '../library/common';
 
 class Login extends React.Component {
     constructor(props){
@@ -23,11 +24,7 @@ class Login extends React.Component {
         LoginFunc(obj)
         .then(function(response) {
             // Cookie
-            const cookies = new Cookies();
-            let curDate = new Date();
-            curDate.setDate(curDate.getDate() + 1);
-            
-            cookies.set("vgb_token", response.data.accessToken, { "expires": curDate });
+            SaveCookieFunc(response.data.accessToken, response.data.userId);
 
             // redirect
             window.location.href = "/";

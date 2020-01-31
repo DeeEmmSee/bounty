@@ -79,7 +79,7 @@ exports.updateBounty = function(req, res) {
 
 exports.createBountyContribution = function(req, res) {
     var bountyContribution = new BountyContribution(req.body);
-    //console.log(bountyContribution);
+    console.log(bountyContribution);
 
     // Check bounty
     if (req.body.skipBountyCheck){
