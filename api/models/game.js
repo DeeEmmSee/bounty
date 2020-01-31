@@ -37,4 +37,23 @@ Game.getAllGames = function() {
     });
 };
 
+Game.getGameById = function(ID) {
+    return new Promise(function(success, fail) {
+        sql.query("SELECT * FROM games WHERE ID = ?", ID, function(err, res) {
+            if (err) {
+                console.log(err);
+                fail(err);
+            }
+            else {
+                if (res.length != 0) {
+                    var game = new Game(res[0]);
+                    success(game);
+                }
+                else {
+                    fail("No game found for id " + ID, null);
+                }
+            }
+        });
+    });
+}
 module.exports = Game;

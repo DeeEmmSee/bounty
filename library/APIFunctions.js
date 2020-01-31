@@ -28,65 +28,45 @@ export async function GetBounty(bountyId){
         return err;
     });*/
 
-    //let res = await axios.get('http://localhost:3001/api/bounties/bounty', {params: {'bountyId': bountyId}});
-    //let { data } = res.data;
-    //return data;
     return axios.get(config.api_url + '/api/bounties/bounty', {params: {'bountyId': bountyId}});
 }
 
-export async function GetRecentlyAdded(){
+export async function GetBounties(obj){
     //let res = await axios.get('http://localhost:3001/api/bounties/recentlyadded');
     //let { data } = res.data;
     //return data;
+    return axios.post(config.api_url + '/api/bounties/bounties', obj);
+}
+
+export async function GetRecentlyAdded(){
     return axios.get(config.api_url + '/api/bounties/recentlyadded');
 }
 
 export async function GetRecentlyClaimed(){
-    //let res = await axios.get('http://localhost:3001/api/bounties/recentlyclaimed');
-    //let { data } = res.data;
-    //return data;
     return axios.get(config.api_url + '/api/bounties/recentlyclaimed');
 }
 
 export async function GetFeatured(){
-    //let res = await axios.get('http://localhost:3001/api/bounties/featured');
-    //let { data } = res.data;
-    //return data;
     return axios.get(config.api_url + '/api/bounties/featured');
 }
 
 export async function RegisterUser(obj){
-    //let res = await axios.get('http://localhost:3001/api/bounties/featured');
-    //let { data } = res.data;
-    //return data;
     return axios.post(config.api_url + '/api/users/user', obj);
 }
 
 export async function Login(obj){
-    //let res = await axios.get('http://localhost:3001/api/bounties/featured');
-    //let { data } = res.data;
-    //return data;
     return axios.post(config.api_url + '/api/auth/login', obj);
 }
 
 export async function GetGameList(){
-    //let res = await axios.get('http://localhost:3001/api/bounties/featured');
-    //let { data } = res.data;
-    //return data;
     return axios.get(config.api_url + '/api/games/all');
 }
 
 export async function SaveNewBounty(obj){
-    //let res = await axios.get('http://localhost:3001/api/bounties/featured');
-    //let { data } = res.data;
-    //return data;
     return axios.post(config.api_url + '/api/bounties/bounty', obj);
 }
 
 export async function SaveNewBountyContribution(obj){
-    //let res = await axios.get('http://localhost:3001/api/bounties/featured');
-    //let { data } = res.data;
-    //return data;
     return axios.post(config.api_url + '/api/bounties/bountycontribution', obj);
 }
 

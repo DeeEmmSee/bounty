@@ -1,6 +1,7 @@
 // MySQL
 const sql = require('../models/sql.js');
 var BountyContribution = require('../models/BountyContribution.js');
+var Game = require('../models/Game.js');
 
 class Bounty {
     constructor(obj){
@@ -9,7 +10,7 @@ class Bounty {
         this.GameID = obj.GameID;
         this.BountyCondition = obj.BountyCondition;
         this.Description = obj.Description;
-        this.Image = "https://www.w3schools.com/bootstrap4/la.jpg"; //obj.image;
+        this.Image = obj.image;
         this.AllowContributors = obj.AllowContributors;
         this.Status = obj.Status;
         this.CreatedBy = obj.CreatedBy;
@@ -21,6 +22,12 @@ class Bounty {
         // Calculated
         this.TotalAmount = 0;
         this.Contributors = [];
+        this.Game = {};
+    }
+
+    SetGame(game){
+        this.GameID = game.ID;
+        this.Game = game;
     }
 
     SetContributors(contribs){
@@ -94,15 +101,26 @@ Bounty.getBounties = function(where, order, orderDesc, limit) {
                     var bounty = new Bounty(res[i]);
                     bounties.push(bounty);
                     
-                    var promise = BountyContribution.getBountyContributionByBounty(bounty.ID);
-                    promises.push(promise);
+                    var bc = BountyContribution.getBountyContributionByBounty(bounty.ID);
+                    promises.push(bc);
+
+                    var game = Game.getGameById(bounty.GameID);
+                    promises.push(game);
                 }
                 
                 if (promises.length > 0) {
                     Promise.all(promises)
                     .then(function(vals){
+                        let bountyCount = 0;
+
                         for (var i = 0; i < vals.length; i++){
-                            bounties[i].SetContributors(vals[i]);
+                            if (i % 2 == 0) { // Even, contribs
+                                bounties[bountyCount].SetContributors(vals[i]);
+                            }
+                            else {
+                                bounties[bountyCount].SetGame(vals[i]);
+                                bountyCount++;
+                            }
                         }
                         //console.log(bounties);
                         success(bounties);
@@ -131,14 +149,30 @@ Bounty.getBounty = function(bountyId) {
                 // Get Contributors
                 if (res.length != 0) {
                     var bounty = new Bounty(res[0]);
-                    BountyContribution.getBountyContributionByBounty(res[0].ID)
-                    .then(function(cons){
-                        bounty.SetContributors(cons);
+                    var promises = [];
+
+                    var bc = BountyContribution.getBountyContributionByBounty(bounty.ID);
+                    promises.push(bc);
+
+                    var game = Game.getGameById(bounty.GameID);
+                    promises.push(game);
+
+                    Promise.all(promises)
+                    .then(function(vals){
+                        for (var i = 0; i < vals.length; i++){
+                            if (i % 2 == 0) { // Even, contribs
+                                bounty.SetContributors(vals[i]);
+                            }
+                            else {
+                                bounty.SetGame(vals[i]);
+                            }
+                        }
+
                         success(bounty);
                     })
-                    .catch(function(err) {
+                    .catch(function(err){
                         console.log(err);
-                        fail(err, null);
+                        fail(err);
                     });
                 }
                 else {

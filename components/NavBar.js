@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import Cookies from 'universal-cookie';
+import {RemoveCookies} from '../library/common';
 
 class NavBar extends React.Component {
     constructor(props){
@@ -50,9 +51,13 @@ class NavBar extends React.Component {
         };
     }
 
+    Logout() {
+        RemoveCookies();
+        window.location.href = '/';
+    }
 
     render() {
-        const List = ({items}) => (
+        const List = ({items, right}) => (
             <ul className="navbar-nav mr-auto">
                 {
                     items.map((item, key) =>
@@ -61,6 +66,8 @@ class NavBar extends React.Component {
                         </li>
                     )
                 }
+
+                { this.state.loggedIn && right && <li className="nav-item"><a href="#" className="nav-link" onClick={this.Logout.bind(this)}>Logout</a></li> }
             </ul>
         );
 
@@ -74,10 +81,10 @@ class NavBar extends React.Component {
                         </button>
                         
                         <div className="navbar-collapse collapse" id="navbarSupportedContent">
-                            <List items={this.state.left} />
+                            <List items={this.state.left} right={false} />
                         </div>
                         <div className="text-right">
-                            <List items={this.state.right} />
+                            <List items={this.state.right} right={true} />
                         </div>
                     </nav>
                 </div>

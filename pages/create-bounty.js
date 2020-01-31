@@ -44,7 +44,8 @@ class CreateBounty extends React.Component {
             obj.AllowContributors = this.state.chkAllowContributors;
             obj.CreatedBy = cookieData.userId; 
             obj.CreatedDate = new Date().toISOString().slice(0, 19).replace('T', ' ');
-            obj.UpdatedDateTime = obj.createdDate; // SQL Error here
+            obj.UpdatedDateTime = obj.createdDate;
+            obj.Image = "https://www.w3schools.com/bootstrap4/la.jpg"; // TODO
 
             SaveNewBountyFunc(obj)
             .then(resp => {

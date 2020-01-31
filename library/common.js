@@ -17,3 +17,36 @@ export function SaveCookie(token, userId) {
     cookies.set(config.vgb_token, token, { "expires": curDate });
     cookies.set(config.vgb_user, userId, { "expires": curDate });
 }
+
+export function RemoveCookies() {
+    const cookies = new Cookies();
+
+    cookies.remove(config.vgb_token);
+    cookies.remove(config.vgb_user);
+}
+
+export function ToReadableDateString(dateIn){
+    if (dateIn === null || dateIn === undefined) {
+        return "";
+    }
+    else {
+        let newDate = new Date(dateIn);
+        //return newDate.toLocaleString();
+        return newDate.toUTCString();
+    }
+}
+
+export function GetStatus(statusID){
+    if (statusID === 1) {
+        return "Open";
+    }
+    else if (statusID === 2) {
+        return "Claimed";
+    }
+    else if (statusID === 3) {
+        return "Closed";
+    }
+    else {
+        return "";
+    }
+}
