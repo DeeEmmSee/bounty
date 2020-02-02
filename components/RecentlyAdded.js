@@ -1,6 +1,7 @@
 //import React from 'react';
 import Link from 'next/link';
 import { GetRecentlyAdded as RecentlyAddedFunc } from '../library/APIFunctions';
+import {ToReadableDateString} from '../library/common';
 
 class RecentlyAdded extends React.Component {
     constructor(props){
@@ -33,7 +34,7 @@ class RecentlyAdded extends React.Component {
             <tr style={{cursor: 'pointer'}} key={key} onClick={this.GoToBounty.bind(this, bounty.ID)}>
                 <td>{bounty.Title}</td>
                 <td>${bounty.TotalAmount}</td>
-                <td>{bounty.CreatedDate}</td>
+                <td>{ToReadableDateString(bounty.CreatedDate)}</td>
             </tr>
         );
 

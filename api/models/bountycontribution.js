@@ -6,6 +6,7 @@ class BountyContribution{
         this.BountyID = obj.BountyID;
         this.UserID = obj.UserID;
         this.Amount = obj.Amount;
+        this.Username = obj.Username;
     }
 
     ToDBObject(){
@@ -19,7 +20,7 @@ class BountyContribution{
 
 BountyContribution.getBountyContributionByBounty = function(bountyId) {
     return new Promise(function(success, fail) {
-        sql.query("SELECT * FROM bountycontributions WHERE BountyID = ?", bountyId, function(err, res) {
+        sql.query("SELECT bc.*, IFNULL(u.Username, 'Unknown User') as 'Username' FROM bountycontributions bc LEFT JOIN users u On bc.UserID = u.ID WHERE BountyID = ?", bountyId, function(err, res) {
             if (err) {
                 console.log(err);
                 fail(err);

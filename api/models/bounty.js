@@ -10,7 +10,7 @@ class Bounty {
         this.GameID = obj.GameID;
         this.BountyCondition = obj.BountyCondition;
         this.Description = obj.Description;
-        this.Image = obj.image;
+        this.Image = obj.Image;
         this.AllowContributors = obj.AllowContributors;
         this.Status = obj.Status;
         this.CreatedBy = obj.CreatedBy;
@@ -23,6 +23,8 @@ class Bounty {
         this.TotalAmount = 0;
         this.Contributors = [];
         this.Game = {};
+        this.CreatedByUsername = obj.CreatedByUsername;
+        this.ClaimedByUsername = obj.ClaimedByUsername;
     }
 
     SetGame(game){
@@ -80,7 +82,7 @@ class Bounty {
 
 Bounty.getBounties = function(where, order, orderDesc, limit) {
     return new Promise(function(success, fail) {
-        var query = "SELECT * FROM bounties";
+        var query = "SELECT b.*, IFNULL(u.Username, 'N/A') as 'CreatedByUsername', IFNULL(u2.Username, 'N/A') as 'ClaimedByUsername' FROM bounties b LEFT JOIN users u ON b.CreatedBy = u.ID LEFT JOIN users u2 ON b.ClaimedBy = u.ID";
 
         if (where != "" && where != null){ query += " WHERE " + where; }
         if (order != "" && order != null){ query += " ORDER BY " + order; }
@@ -140,7 +142,7 @@ Bounty.getBounties = function(where, order, orderDesc, limit) {
 
 Bounty.getBounty = function(bountyId) {
     return new Promise(function(success, fail) {
-        sql.query("SELECT * FROM bounties WHERE ID = ?", bountyId, function(err, res) {
+        sql.query("SELECT b.*, IFNULL(u.Username, 'N/A') as 'CreatedByUsername', IFNULL(u2.Username, 'N/A') as 'ClaimedByUsername' FROM bounties b LEFT JOIN users u ON b.CreatedBy = u.ID LEFT JOIN users u2 ON b.ClaimedBy = u.ID WHERE b.ID = ?", bountyId, function(err, res) {
             if (err) {
                 console.log(err);
                 fail(err);
