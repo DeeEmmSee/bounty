@@ -1,8 +1,18 @@
 var Bounty = require("../models/bounty.js");
 var BountyContribution = require("../models/bountycontribution.js");
 
+function GetLimit(defaultValue, newValue) {
+    if (newValue != 'undefined' && newValue != undefined && newValue != NaN){
+        return newValue;
+    }
+    else {
+        return defaultValue;
+    }
+}
 exports.getRecentlyAdded = function(req, res) {
-    Bounty.getBounties("1=1", "`CreatedDate`", true, 3)
+    let limit = GetLimit(3, req.query.limit);
+    
+    Bounty.getBounties("1=1", "`CreatedDate`", true, limit)
     .then(function(bounties) {
         res.status(200).send(bounties);
     })
@@ -12,7 +22,9 @@ exports.getRecentlyAdded = function(req, res) {
 };
 
 exports.getRecentlyClaimed = function(req, res) {
-    Bounty.getBounties("1=1 AND IFNULL(`ClaimedDate`, '') != ''", "`ClaimedDate`", true, 3)
+    let limit = GetLimit(3, req.query.limit);
+    
+    Bounty.getBounties("1=1 AND IFNULL(`ClaimedDate`, '') != ''", "`ClaimedDate`", true, limit)
     .then(function(bounties) {
         res.status(200).send(bounties);
     })
@@ -22,7 +34,9 @@ exports.getRecentlyClaimed = function(req, res) {
 };
 
 exports.getFeatured = function(req, res) {
-    Bounty.getBounties("Featured = 1", "`CreatedDate`", false, 5)
+    let limit = GetLimit(5, req.query.limit);
+    
+    Bounty.getBounties("Featured = 1", "`CreatedDate`", false, limit)
     .then(function(bounties) {
         res.status(200).send(bounties);
     })
@@ -32,7 +46,9 @@ exports.getFeatured = function(req, res) {
 };
 
 exports.getBounties = function(req, res) {
-    Bounty.getBounties("", "", false, 10)
+    let limit = GetLimit(100, req.query.limit); // TODO: infinite scrolling + limiting
+        
+    Bounty.getBounties("", "", false, limit)
     .then(function(bounties) {
         res.status(200).send(bounties);
     })
@@ -79,7 +95,6 @@ exports.updateBounty = function(req, res) {
 
 exports.createBountyContribution = function(req, res) {
     var bountyContribution = new BountyContribution(req.body);
-    console.log(bountyContribution);
 
     // Check bounty
     if (req.body.skipBountyCheck){
@@ -94,13 +109,14 @@ exports.createBountyContribution = function(req, res) {
     else {
         Bounty.getBounty(bountyContribution.BountyID)
         .then(function(bountyRes) {
-            if (bountyRes.length == 1) {
-                if (bountyRes[0].AllowContributors){
+            if (bountyRes !== null && bountyRes.ID != 'undefined' && bountyRes.ID != undefined) {
+                if (bountyRes.AllowContributors){
                     BountyContribution.createBountyContribution(bountyContribution)
                     .then(function(bountycontribution) {
                         res.status(200).send(bountycontribution);
                     })
                     .catch(function(err) {
+                        console.log(err);
                         res.status(500).send(err);
                     });
                 }
@@ -113,6 +129,7 @@ exports.createBountyContribution = function(req, res) {
             }
         })
         .catch(function(err) {
+            console.log(err);
             res.status(500).send(err);
         });  
     } 

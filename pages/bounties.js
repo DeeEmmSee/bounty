@@ -1,6 +1,6 @@
 import Layout from '../components/Layout';
 import GameList from '../components/GameList';
-import {GetBounties as GetBountiesFunc} from '../library/APIFunctions';
+import {GetBounties} from '../library/APIFunctions';
 import {ToReadableDateString} from '../library/common';
 
 class Bounties extends React.Component {
@@ -33,7 +33,7 @@ class Bounties extends React.Component {
 
         let obj = {};
 
-        GetBountiesFunc(obj)
+        GetBounties(obj)
         .then(res => {
             state.setState({loaded: true, bountyList: res.data});
         })

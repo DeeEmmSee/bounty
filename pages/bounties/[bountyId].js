@@ -1,18 +1,22 @@
 import Layout from '../../components/Layout';
-import { GetBounty as GetBountyFunc } from '../../library/APIFunctions';
+import { GetBounty as GetBountyFunc, SaveNewBountyContribution as SaveNewContribFunc } from '../../library/APIFunctions';
 import { withRouter } from 'next/router';
-import {ToReadableDateString, GetStatus} from '../../library/common';
+import {ToReadableDateString, GetStatus, GetDBDate, GetCookieData} from '../../library/common';
 
 class BountyPage extends React.Component {
     constructor(props){
         super(props);
+
+        let cookieData = GetCookieData();
+
         this.state = {
             loaded: false,
             bounty: {
                 Contributors: []
             },
             errorMsg: "",
-            txtContributionAmount: ""
+            txtContributionAmount: "",
+            currentUserId: cookieData.userId
         };
 
         this.GetBounty(this.props.router.query.bountyId);
@@ -48,12 +52,19 @@ class BountyPage extends React.Component {
 
     SaveNewContribution() {
         let state = this;
-        let obj = {};
+        let contObj = {};
+       
+        contObj.BountyID = state.state.bounty.ID;
+        contObj.UserID = state.state.currentUserId;
+        contObj.Amount = Number(state.state.txtContributionAmount);
+        contObj.skipBountyCheck = false;
+        contObj.DateAdded = GetDBDate();
 
-
-        SaveNewContribFunc()
+        SaveNewContribFunc(contObj)
         .then(res => {
             // success
+            state.GetBounty(contObj.BountyID);
+            state.setState({txtContributionAmount: ""});
         })
         .catch(err => {
             console.log(err);
@@ -68,6 +79,10 @@ class BountyPage extends React.Component {
                 <td>${contrib.Amount}</td>
             </tr>
         );
+
+        const ContribCheck = function(contributor){
+            return contributor.UserID == this;
+        };
 
         return (
             <Layout>
@@ -106,15 +121,19 @@ class BountyPage extends React.Component {
                                 </tbody>
                             </table>
 
-                            {this.state.bounty.AllowContributors && 
+                            {this.state.bounty.AllowContributors && this.state.bounty.Contributors.filter(ContribCheck, this.state.currentUserId).length === 0 &&
                                  <div className="form-group">
                                     <label htmlFor="txtContributionAmount" className="control-label">Amount to Contribute ($) *</label>
                                     <div className="input-group mb-3">
                                         <div className="input-group-prepend">
-                                        <span className="input-group-text" id="basic-addon1">$</span>
+                                            <span className="input-group-text" id="basic-addon1">$</span>
                                         </div>
                                         <input type="text" name="txtContributionAmount" value={this.state.txtContributionAmount} className="form-control" placeholder="0" onChange={this.HandleInputChange.bind(this)}/>
                                     </div>
+                                    <p>
+                                        By clicking this button you agree to pay the user that successfully claimed this bounty the amount entered in the box above. It is your responsibility to ensure that all payments are made in good time after the bounty has been claimed. 
+                                        You will be notified once the bounty has been claimed in order for you to make your payment swiftly.
+                                    </p>
                                     <button onClick={this.SaveNewContribution.bind(this)} className="btn btn-primary">Add Contribution</button>
                                 </div>
                             }

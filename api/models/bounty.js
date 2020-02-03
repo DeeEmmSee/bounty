@@ -178,7 +178,7 @@ Bounty.getBounty = function(bountyId) {
                     });
                 }
                 else {
-                    fail("No bounty found for id " + bountyId, null);
+                    fail("No bounty found for id " + bountyId);
                 }
             }
         })

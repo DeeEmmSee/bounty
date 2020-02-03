@@ -31,23 +31,23 @@ export async function GetBounty(bountyId){
     return axios.get(config.api_url + '/api/bounties/bounty', {params: {'bountyId': bountyId}});
 }
 
-export async function GetBounties(obj){
+export async function GetBounties(obj, limit){
     //let res = await axios.get('http://localhost:3001/api/bounties/recentlyadded');
     //let { data } = res.data;
     //return data;
-    return axios.post(config.api_url + '/api/bounties/bounties', obj);
+    return axios.post(config.api_url + '/api/bounties/bounties?limit=' + limit, obj);
 }
 
-export async function GetRecentlyAdded(){
-    return axios.get(config.api_url + '/api/bounties/recentlyadded');
+export async function GetRecentlyAdded(limit){
+    return axios.get(config.api_url + '/api/bounties/recentlyadded?limit=' + limit);
 }
 
-export async function GetRecentlyClaimed(){
-    return axios.get(config.api_url + '/api/bounties/recentlyclaimed');
+export async function GetRecentlyClaimed(limit){
+    return axios.get(config.api_url + '/api/bounties/recentlyclaimed?limit=' + limit);
 }
 
-export async function GetFeatured(){
-    return axios.get(config.api_url + '/api/bounties/featured');
+export async function GetFeatured(limit){
+    return axios.get(config.api_url + '/api/bounties/featured?limit=' + limit);
 }
 
 export async function RegisterUser(obj){

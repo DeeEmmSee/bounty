@@ -1,8 +1,9 @@
+import Link from 'next/link';
 import Layout from '../components/Layout';
 import GameList from '../components/GameList';
 import { SaveNewBounty as SaveNewBountyFunc, SaveNewBountyContribution as SaveNewBountyContFunc } from '../library/APIFunctions';
 import config from '../library/config';
-import { GetCookieData as CookieDataFunc } from '../library/common';
+import { GetCookieData as CookieDataFunc, GetDBDate } from '../library/common';
 
 class CreateBounty extends React.Component {
     constructor(props){
@@ -43,7 +44,7 @@ class CreateBounty extends React.Component {
             obj.Description = this.state.txtDescription;
             obj.AllowContributors = this.state.chkAllowContributors;
             obj.CreatedBy = cookieData.userId; 
-            obj.CreatedDate = new Date().toISOString().slice(0, 19).replace('T', ' ');
+            obj.CreatedDate = GetDBDate();
             obj.UpdatedDateTime = obj.createdDate;
             obj.Image = "https://www.w3schools.com/bootstrap4/la.jpg"; // TODO
 
@@ -54,10 +55,9 @@ class CreateBounty extends React.Component {
                 contObj.UserID = cookieData.userId;
                 contObj.Amount = Number(state.state.txtContributionAmount);
                 contObj.skipBountyCheck = true;
-
-                console.log(contObj);
-
-                if (contObj.amount != NaN && contObj.amount != 0) {
+                contObj.DateAdded = GetDBDate();
+                
+                if (contObj.Amount != NaN && contObj.Amount > 0) {
                     // Save contribution
                    this.SaveBountyContrib(state, contObj);
                 }
@@ -79,7 +79,7 @@ class CreateBounty extends React.Component {
     SaveBountyContrib(state, contObj) {
         SaveNewBountyContFunc(contObj)
         .then(function(contResponse) {
-            state.setState({showFormFields: false, showSuccess: true, newUrl: config.site_url + "/bounties/" + contObj.BountyID});
+            state.setState({showFormFields: false, showSuccess: true, newUrl: "/bounties/" + contObj.BountyID});
         })
         .catch(function(error) {
             console.log(error);
@@ -140,8 +140,7 @@ class CreateBounty extends React.Component {
             <div className="row">
                 <div className="col-sm-12">
                     Success! <br />
-                    Link: {this.state.newUrl} <br />
-                    <a href={this.state.newUrl}>Click here to view bounty page</a>
+                    <Link href={this.state.newUrl}><a>Click here to view bounty page</a></Link>
                 </div>
             </div>
             );

@@ -36,6 +36,10 @@ export function ToReadableDateString(dateIn){
     }
 }
 
+export function GetDBDate() {
+    return new Date().toISOString().slice(0, 19).replace('T', ' ');
+}
+
 export function GetStatus(statusID){
     if (statusID === 1) {
         return "Open";

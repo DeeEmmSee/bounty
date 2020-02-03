@@ -7,6 +7,8 @@ class BountyContribution{
         this.UserID = obj.UserID;
         this.Amount = obj.Amount;
         this.Username = obj.Username;
+        this.DateAdded = obj.DateAdded;
+        this.DatePaid = obj.DatePaid;
     }
 
     ToDBObject(){
@@ -14,13 +16,15 @@ class BountyContribution{
             "BountyID": this.BountyID,
             "UserID": this.UserID,
             "Amount": this.Amount,
+            "DateAdded": this.DateAdded,
+            "DatePaid": this.DatePaid,
         }
     }
 }
 
 BountyContribution.getBountyContributionByBounty = function(bountyId) {
     return new Promise(function(success, fail) {
-        sql.query("SELECT bc.*, IFNULL(u.Username, 'Unknown User') as 'Username' FROM bountycontributions bc LEFT JOIN users u On bc.UserID = u.ID WHERE BountyID = ?", bountyId, function(err, res) {
+        sql.query("SELECT bc.*, IFNULL(u.Username, 'Unknown User') as 'Username' FROM bountycontributions bc LEFT JOIN users u On bc.UserID = u.ID WHERE BountyID = ? ORDER BY DateAdded DESC", bountyId, function(err, res) {
             if (err) {
                 console.log(err);
                 fail(err);
@@ -38,7 +42,7 @@ BountyContribution.getBountyContributionByBounty = function(bountyId) {
 
 BountyContribution.getBountyContributionByUser = function(userId) {
     return new Promise(function(success, fail) {
-        sql.query("SELECT * FROM bountycontributions WHERE UserID = ?", userId, function(err, res) {
+        sql.query("SELECT * FROM bountycontributions WHERE UserID = ? ORDER BY DateAdded DESC", userId, function(err, res) {
             if (err) {
                 console.log(err);
                 fail(err);
@@ -56,7 +60,7 @@ BountyContribution.getBountyContributionByUser = function(userId) {
 
 BountyContribution.createBountyContribution = function(bountyContribution) {
     return new Promise(function(success, fail) {
-        sql.query("INSERT INTO bountycontributions SET ?", bountyContribution, function(err, res) {
+        sql.query("INSERT INTO bountycontributions SET ?", bountyContribution.ToDBObject(), function(err, res) {
             if (err) {
                 console.log(err);
                 fail(err);
