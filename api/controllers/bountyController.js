@@ -47,8 +47,24 @@ exports.getFeatured = function(req, res) {
 
 exports.getBounties = function(req, res) {
     let limit = GetLimit(100, req.query.limit); // TODO: infinite scrolling + limiting
-        
-    Bounty.getBounties("", "", false, limit)
+
+    let where = "";
+    let order = "";
+    let orderDesc = false;
+
+    if (req.body.where !== undefined && req.body.where !== 'undefined'){
+        where = req.body.where;
+    }
+
+    if (req.body.order !== undefined && req.body.order !== 'undefined'){
+        order = req.body.order;
+    }
+
+    if (req.body.orderDesc !== undefined && req.body.orderDesc !== 'undefined'){
+        orderDesc = req.body.orderDesc;
+    }
+
+    Bounty.getBounties(where, order, orderDesc, limit)
     .then(function(bounties) {
         res.status(200).send(bounties);
     })

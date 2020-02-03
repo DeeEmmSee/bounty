@@ -108,6 +108,7 @@ class BountyPage extends React.Component {
                         TotalAmount: ${this.state.bounty.TotalAmount }<br />
                         
                         <h4>Contributors</h4>
+                        { this.state.bounty.Contributors.length > 0 ?
                         <div>
                             <table className="table table-striped table-hover">
                                 <thead className="thead-light">
@@ -121,7 +122,7 @@ class BountyPage extends React.Component {
                                 </tbody>
                             </table>
 
-                            {this.state.bounty.AllowContributors && this.state.bounty.Contributors.filter(ContribCheck, this.state.currentUserId).length === 0 &&
+                            {this.state.bounty.AllowContributors && this.state.bounty.Contributors.filter(ContribCheck, this.state.currentUserId).length === 0 && 
                                  <div className="form-group">
                                     <label htmlFor="txtContributionAmount" className="control-label">Amount to Contribute ($) *</label>
                                     <div className="input-group mb-3">
@@ -135,9 +136,14 @@ class BountyPage extends React.Component {
                                         You will be notified once the bounty has been claimed in order for you to make your payment swiftly.
                                     </p>
                                     <button onClick={this.SaveNewContribution.bind(this)} className="btn btn-primary">Add Contribution</button>
-                                </div>
+                                </div> 
                             }
                         </div>
+                        :
+                        <div>
+                            No contributors for this bounty
+                        </div>
+                        }
                     </div>
                 </div>
             </Layout>

@@ -20,7 +20,7 @@ class Bounty {
         this.UpdatedDateTime = obj.UpdatedDateTime;
     
         // Calculated
-        this.TotalAmount = 0;
+        this.TotalAmount = obj.TotalAmount;
         this.Contributors = [];
         this.Game = {};
         this.CreatedByUsername = obj.CreatedByUsername;
@@ -34,12 +34,12 @@ class Bounty {
 
     SetContributors(contribs){
         this.Contributors = contribs;
-        var amount = 0;
+        /*var amount = 0;
 
         for (var i = 0; i < contribs.length; i++) {
             amount += this.Contributors[i].Amount;
         }
-        this.TotalAmount = amount;
+        this.TotalAmount = amount;*/
     }
 
     ToDBObject(){
@@ -82,11 +82,13 @@ class Bounty {
 
 Bounty.getBounties = function(where, order, orderDesc, limit) {
     return new Promise(function(success, fail) {
-        var query = "SELECT b.*, IFNULL(u.Username, 'N/A') as 'CreatedByUsername', IFNULL(u2.Username, 'N/A') as 'ClaimedByUsername' FROM bounties b LEFT JOIN users u ON b.CreatedBy = u.ID LEFT JOIN users u2 ON b.ClaimedBy = u.ID";
+        var query = "SELECT b.`ID`, b.`GameID`, b.`Title`, b.`BountyCondition`, b.`Description`, b.`Image`, b.`Status`, b.`AllowContributors`, b.`Featured`, b.`CreatedBy`, b.`CreatedDate`, b.`ClaimedBy`, b.`ClaimedDate`, b.`UpdatedDateTime`, IFNULL(u.`Username`, 'N/A') as 'CreatedByUsername', IFNULL(u2.`Username`, 'N/A') as 'ClaimedByUsername', IFNULL(SUM(bc.`Amount`), 0) as 'TotalAmount' FROM bounties b LEFT JOIN users u ON b.CreatedBy = u.ID LEFT JOIN users u2 ON b.ClaimedBy = u.ID LEFT JOIN bountycontributions bc ON b.ID = bc.BountyID";
 
         if (where != "" && where != null){ query += " WHERE " + where; }
-        if (order != "" && order != null){ query += " ORDER BY " + order; }
-        query += orderDesc ? " DESC" : "";
+
+        query += " GROUP BY b.`ID`, b.`GameID`, b.`Title`, b.`BountyCondition`, b.`Description`, b.`Image`, b.`Status`, b.`AllowContributors`, b.`Featured`, b.`CreatedBy`, b.`CreatedDate`, b.`ClaimedBy`, b.`ClaimedDate`, b.`UpdatedDateTime`, IFNULL(u.`Username`, 'N/A'), IFNULL(u2.`Username`, 'N/A')";
+
+        if (order != "" && order != null){ query += " ORDER BY " + order; query += orderDesc ? " DESC" : ""; }
         if (limit != "" && limit != null){ query += " LIMIT " + limit; }
 
         sql.query(query, function(err, res) {

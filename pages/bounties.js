@@ -13,6 +13,9 @@ class Bounties extends React.Component {
             txtCreatedDate: "",
             txtBountyAmount: "",
             txtSearch: "",
+            ddlStatus: "1",
+            ddlOrderBy: "CreatedDate",
+            orderByDesc: "DESC",
             bountyList: []
         };
 
@@ -29,9 +32,14 @@ class Bounties extends React.Component {
     }
 
     SearchBounties() {
+        this.setState({loaded: false});
+
         let state = this;
 
         let obj = {};
+        obj.where = this.BuildWhere();
+        obj.order = this.state.ddlOrderBy;
+        obj.orderDesc = this.state.orderByDesc === "DESC";
 
         GetBounties(obj)
         .then(res => {
@@ -42,6 +50,31 @@ class Bounties extends React.Component {
             state.setState({loaded: true});
         });
         
+    }
+
+    BuildWhere(){
+        let where = "1=1";
+        if (this.state.selectedGame != null && this.state.selectedGame != {} && this.state.selectedGame.ID != undefined && this.state.selectedGame.ID != 'undefined') {
+            where += " AND `GameID` = " + this.state.selectedGame.ID;
+        }
+
+        if (this.state.txtCreatedDate != null && this.state.txtCreatedDate != "") {
+            where += " AND `CreatedDate` = " + this.state.selectedGame.ID;
+        }
+
+        if (this.state.txtBountyAmount != null && this.state.txtBountyAmount != "") {
+            where += " AND `GameID` = " + this.state.txtBountyAmount;
+        }
+
+        if (this.state.txtSearch != null && this.state.txtSearch != "") {
+            where += " AND `Title` LIKE '%" + this.state.txtSearch + "%' OR `BountyCondition` LIKE '%" + this.state.txtSearch + "%'";
+        }
+
+        if (this.state.ddlStatus != null && this.state.ddlStatus != "") {
+            where += " AND `Status` = " + this.state.ddlStatus;
+        }
+
+        return where;
     }
     
     GameListCallback = game => {
@@ -99,7 +132,11 @@ class Bounties extends React.Component {
                         </div>
                         <div className="form-group">
                             <label>Status</label>
-                            <input type="text" className="form-control" name="txtStatus" value={this.state.txtStatus} onChange={this.HandleInputChange} />
+                            <select className="form-control" name="ddlStatus" defaultValue={this.state.ddlStatus} onChange={this.HandleInputChange}>
+                                <option defaultValue value="1">Open</option>
+                                <option value="2">Claimed</option>
+                                <option value="3">Closed</option>
+                            </select>
                         </div>
                         <div className="form-group">
                             <label>Bounty Amount</label>
@@ -107,29 +144,50 @@ class Bounties extends React.Component {
                         </div>
                         <div className="form-group">
                             <label>Search</label>
-                            <input type="text" className="form-control" name="txtSearch" value={this.state.txtSearch}onChange={this.HandleInputChange}  />
+                            <input type="text" className="form-control" name="txtSearch" value={this.state.txtSearch} onChange={this.HandleInputChange}  />
+                        </div>
+                        <div className="form-group">
+                            <label>Order By</label>
+                            <select className="form-control" name="ddlOrderBy" defaultValue={this.state.ddlOrderBy} onChange={this.HandleInputChange}>
+                                <option defaultValue value="CreatedDate">Created Date</option>
+                                <option value="GameID">Game</option>
+                                <option value="Status">Status</option>
+                                <option value="Amount">Bounty Amount</option>
+                            </select>
+                        </div>
+                        <div className="form-group">
+                            <div className="radio">
+                                <label>
+                                    <input type="radio" name="orderByDesc" value="ASC" checked={this.state.orderByDesc === 'ASC'} onChange={this.HandleInputChange} />
+                                    &nbsp;Ascending
+                                </label>
+                            </div>
+                            <div className="radio">
+                                <label>
+                                    <input type="radio" name="orderByDesc" value="DESC" checked={this.state.orderByDesc === 'DESC'} onChange={this.HandleInputChange} />
+                                    &nbsp;Descending
+                                </label>
+                            </div>
                         </div>
                         <div className="form-group">
                             <button className="form-control" onClick={this.SearchBounties.bind(this)}>Search</button>
                         </div>
                     </div>
+                    
                     {
-                        this.state.loaded && 
+                        this.state.loaded ?
                         <div className="col-sm-9">
                             <div className="row" style={{"marginLeft": "0px"}}>
                                 <BountyList items={this.state.bountyList}/>
                             </div>
-                        </div>
-                    }
-
-                    {
-                        !this.state.loaded && 
+                        </div> : 
                         <div className="col-sm-9">
                             <div className="col-sm-12" style={{"textAlign": "center"}}>
                                 <span>Loading...</span>
                             </div>
                         </div>
                     }
+
                                         
                 </div>
                 
