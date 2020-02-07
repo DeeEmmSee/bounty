@@ -2,6 +2,33 @@ const User = require("../models/user.js");
 const crypto = require('crypto');
 
 exports.getUser = function(req, res) {
+    User.getUser(req.query.userId)
+    .then(function(user) {
+        res.status(200).send(user);
+    })
+    .catch(function(err) {
+        res.status(500).send(err);
+    });
+    
+    /*User.getUser(req.params.userId)
+    .then(function() {
+        res.status(200).send(user);
+    })
+    .catch(function() {
+        res.status(500).send(err);
+    });*/
+
+    // , function(err, user){
+    //     if (err) {
+    //         res.status(500).send(err);
+    //     }
+    //     else {
+    //         res.status(200).send(user);
+    //     }
+    // }
+};
+
+exports.getUserByEmail = function(req, res) {
     User.getUserByEmail(req.body.email)
     .then(function(user) {
         res.status(200).send(user);

@@ -20,7 +20,7 @@ class Bounties extends React.Component {
         };
 
         this.HandleInputChange = this.HandleInputChange.bind(this);
-        this.SearchBounties();
+        this.SearchBounties(true);
     }
     
     HandleInputChange(event) {
@@ -31,9 +31,11 @@ class Bounties extends React.Component {
         this.setState({[name]: value});
     }
 
-    SearchBounties() {
-        this.setState({loaded: false});
-
+    SearchBounties(initial) {
+        if (!initial) {
+            this.setState({loaded: false});
+        }
+        
         let state = this;
 
         let obj = {};
@@ -170,7 +172,7 @@ class Bounties extends React.Component {
                             </div>
                         </div>
                         <div className="form-group">
-                            <button className="form-control" onClick={this.SearchBounties.bind(this)}>Search</button>
+                            <button className="form-control" onClick={this.SearchBounties.bind(this, false)}>Search</button>
                         </div>
                     </div>
                     

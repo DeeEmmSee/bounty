@@ -28,8 +28,7 @@ class BountyPage extends React.Component {
     }
 
     GetBounty(bountyId){
-        this.loaded = false;
-        this.loaded = true;
+        this.state.loaded = false;
         let bountyPage = this;
 
         GetBountyFunc(bountyId)

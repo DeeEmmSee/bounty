@@ -1,7 +1,7 @@
 import Layout from '../components/Layout';
 import Cookies from 'universal-cookie';
 import { Login as LoginFunc } from '../library/APIFunctions';
-import { SaveCookie as SaveCookieFunc } from '../library/common';
+import { SaveCookie as SaveCookieFunc, IsLoggedIn } from '../library/common';
 
 class Login extends React.Component {
     constructor(props){
@@ -12,6 +12,10 @@ class Login extends React.Component {
         };
 
         this.HandleInputChange = this.HandleInputChange.bind(this);
+
+        if (IsLoggedIn()) {
+            window.location.href = "/";
+        }
     }
     
     SubmitLogin(){

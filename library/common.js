@@ -1,6 +1,11 @@
 import Cookies from 'universal-cookie';
 import config from './config';
 
+export function IsLoggedIn() {
+    let cookieData = GetCookieData();
+    return cookieData.token !== undefined && cookieData.token !== 'undefined' && cookieData.userId !== undefined && cookieData.userId !== 'undefined';
+}
+
 export function GetCookieData() {
     const cookies = new Cookies();
     let token = cookies.get(config.vgb_token);

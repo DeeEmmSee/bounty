@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import Cookies from 'universal-cookie';
-import {RemoveCookies} from '../library/common';
+import {RemoveCookies, IsLoggedIn} from '../library/common';
 
 class NavBar extends React.Component {
     constructor(props){
@@ -8,7 +8,7 @@ class NavBar extends React.Component {
         const cookies = new Cookies();
 
         let cookieObj = cookies.get("vgb_token");
-        let loggedIn = cookieObj != null && cookieObj != undefined;
+        let loggedIn = IsLoggedIn(); //cookieObj != null && cookieObj != undefined;
 
         let li = [
             {"name": "Home", "href": "/", "class": "nav-item active", "active": false},

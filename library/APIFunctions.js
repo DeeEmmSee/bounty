@@ -70,6 +70,10 @@ export async function SaveNewBountyContribution(obj){
     return axios.post(config.api_url + '/api/bounties/bountycontribution', obj);
 }
 
+export async function GetUser(userId){
+    return axios.post(config.api_url + '/api/users/user', {params: {'userId': userId}});
+}
+
 // export default function APIFunctions() {
     
 // }

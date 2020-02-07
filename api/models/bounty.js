@@ -34,12 +34,12 @@ class Bounty {
 
     SetContributors(contribs){
         this.Contributors = contribs;
-        /*var amount = 0;
+        var amount = 0;
 
         for (var i = 0; i < contribs.length; i++) {
             amount += this.Contributors[i].Amount;
         }
-        this.TotalAmount = amount;*/
+        this.TotalAmount = amount;
     }
 
     ToDBObject(){
