@@ -10,7 +10,7 @@ class ProfileOverviewComp extends React.Component {
     render() {
         return(
             <div>
-                Profile
+                Profile 
             </div>
         );
     }

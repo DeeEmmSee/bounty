@@ -12,7 +12,8 @@ class BountyPage extends React.Component {
         this.state = {
             loaded: false,
             bounty: {
-                Contributors: []
+                Contributors: [],
+                Attempts: [],   
             },
             errorMsg: "",
             txtContributionAmount: "",
@@ -36,6 +37,7 @@ class BountyPage extends React.Component {
 
         GetBountyFunc(bountyId)
         .then(function(res) {
+            console.log(res.data);
             bountyPage.setState((state) => { return {bounty: res.data, loaded: true} });
         })
         .catch(function(error) {
@@ -108,6 +110,7 @@ class BountyPage extends React.Component {
         SaveNewAttemptFunc(obj)
         .then(res => {
             // success
+            state.GetBounty(obj.BountyID);
             state.setState({txtAttemptProof: "", errorMsgSubmitAttempt: "Attempt submitted successfully!"});
             $("#newAttemptModal").modal('hide');
         })
@@ -125,9 +128,33 @@ class BountyPage extends React.Component {
             </tr>
         );
 
+        const Attempts = this.state.bounty.Attempts.map((attempt, key) =>
+            <tr key={key}>
+                <td>{attempt.Username}</td>
+                <td>{ToReadableDateString(attempt.DateAdded)}</td>
+                <td>{attempt.Proof}</td>
+            </tr>
+        );
+
         const ContribCheck = function(contributor){
             return contributor.UserID == this;
         };
+
+        const AttemptCheck = function(attempt){
+            return attempt.UserID == this;
+        };
+
+        const ClaimedPanel = () => {
+            return (
+                <div>
+                    <h4>Bounty Claimed</h4>
+                    <span>ClaimedBy:</span> {this.state.bounty.ClaimedByUsername} <br />
+                    <span>ClaimedDate:</span> {ToReadableDateString(this.state.bounty.ClaimedDate)} <br />
+
+                    <div>{this.state.bounty.ConfirmedAttempt.Proof}</div>
+                </div>
+            );
+        }
 
         return (
             <Layout>
@@ -157,9 +184,30 @@ class BountyPage extends React.Component {
 
                         <h4>Attempts</h4>
                         {
-                            this.state.bounty.Status == 1 && this.state.bounty.CreatedBy !== this.state.currentUserId && <a href="#" data-toggle="modal" data-target="#newAttemptModal">Click here to submit an attempt</a>
+                            this.state.bounty.Status == 1 && this.state.bounty.CreatedBy !== this.state.currentUserId && this.state.bounty.Attempts.filter(AttemptCheck, this.state.currentUserId).length < this.state.bounty.MaxAttempts && <a href="#" data-toggle="modal" data-target="#newAttemptModal">Click here to submit an attempt</a>
                         }
                         
+                        { this.state.bounty.Attempts.length > 0 ?
+                        <div>
+                            <table className="table table-striped table-hover">
+                                <thead className="thead-light">
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Date Added</th>
+                                        <th>Proof</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {Attempts}
+                                </tbody>
+                            </table>
+                        </div>
+                        :
+                        <div>
+                            No attempts for this bounty
+                        </div>
+                        }
+
                         <div className="modal fade" id="newAttemptModal" tabIndex="-1" role="dialog" aria-labelledby="newAttemptModalLabel" aria-hidden="true">
                             <div className="modal-dialog" role="document">
                                 <div className="modal-content">
@@ -246,6 +294,8 @@ class BountyPage extends React.Component {
                             No contributors for this bounty
                         </div>
                         }
+
+                        { this.state.bounty.Status == 2 && <ClaimedPanel /> }
                     </div>
                 </div>
             </Layout>

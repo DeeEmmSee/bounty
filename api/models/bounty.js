@@ -2,6 +2,7 @@
 const sql = require('../models/sql.js');
 var BountyContribution = require('../models/BountyContribution.js');
 var Game = require('../models/Game.js');
+var BountyAttempt = require('../models/bountyattempt.js');
 
 class Bounty {
     constructor(obj){
@@ -26,6 +27,26 @@ class Bounty {
         this.Game = {};
         this.CreatedByUsername = obj.CreatedByUsername;
         this.ClaimedByUsername = obj.ClaimedByUsername;
+        this.Attempts = [];
+        this.ConfirmedAttempt = {};
+    }
+
+    SetAttempts(attempts){
+        this.Attempts = attempts;
+
+        if (attempts.length > 0) {
+            let confirmedAttempt = attempts.find((attempt) => { return attempt.Confirmed });
+
+            if (confirmedAttempt === undefined || confirmedAttempt === 'undefined') {
+                this.ConfirmedAttempt = {};
+            }
+            else {
+                this.ConfirmedAttempt = confirmedAttempt
+            }
+        }
+        else {
+            this.ConfirmedAttempt = {};
+        }
     }
 
     SetGame(game){
@@ -106,12 +127,16 @@ Bounty.getBounties = function(where, order, orderDesc, limit) {
                 for (var i = 0; i < res.length; i++) {
                     var bounty = new Bounty(res[i]);
                     bounties.push(bounty);
-                    
-                    var bc = BountyContribution.getBountyContributionByBounty(bounty.ID);
-                    promises.push(bc);
 
+                    // ORDER IS IMPORTANT
                     var game = Game.getGameById(bounty.GameID);
                     promises.push(game);
+
+                    var bc = BountyContribution.getBountyContributionByBounty(bounty.ID);
+                    promises.push(bc);
+                   
+                    var attempt = BountyAttempt.getBountyAttemptsByBounty(bounty.ID);
+                    promises.push(attempt);
                 }
                 
                 if (promises.length > 0) {
@@ -119,13 +144,18 @@ Bounty.getBounties = function(where, order, orderDesc, limit) {
                     .then(function(vals){
                         let bountyCount = 0;
 
-                        for (var i = 0; i < vals.length; i++){
-                            if (i % 2 == 0) { // Even, contribs
+                        for (var i = 0; i < vals.length; i++) {
+                            var tmpI = i + 1;
+
+                            if (tmpI % 3 == 0) { // 3rd
+                                bounties[bountyCount].SetAttempts(vals[i]);
+                                bountyCount++;
+                            }
+                            else if (tmpI % 2 == 0) { // 2nd
                                 bounties[bountyCount].SetContributors(vals[i]);
                             }
-                            else {
+                            else { // 1st
                                 bounties[bountyCount].SetGame(vals[i]);
-                                bountyCount++;
                             }
                         }
                         //console.log(bounties);
@@ -157,16 +187,25 @@ Bounty.getBounty = function(bountyId) {
                     var bounty = new Bounty(res[0]);
                     var promises = [];
 
-                    var bc = BountyContribution.getBountyContributionByBounty(bounty.ID);
-                    promises.push(bc);
-
+                    // ORDER IS IMPORTANT
                     var game = Game.getGameById(bounty.GameID);
                     promises.push(game);
+
+                    var bc = BountyContribution.getBountyContributionByBounty(bounty.ID);
+                    promises.push(bc);
+                    
+                    var attempt = BountyAttempt.getBountyAttemptsByBounty(bounty.ID);
+                    promises.push(attempt);
 
                     Promise.all(promises)
                     .then(function(vals){
                         for (var i = 0; i < vals.length; i++){
-                            if (i % 2 == 0) { // Even, contribs
+                            var tmpI = i + 1;
+                           
+                            if (tmpI % 3 == 0) { 
+                                bounty.SetAttempts(vals[i]);
+                            }
+                            else if (tmpI % 2 == 0) { // Even, contribs
                                 bounty.SetContributors(vals[i]);
                             }
                             else {

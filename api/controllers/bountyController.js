@@ -178,10 +178,8 @@ exports.isValidBountyAttempt = function(req, res, next) {
     Bounty.getBounty(req.body.BountyID)
     .then(function(bounty) {
         if (bounty.CreatedBy !== req.body.UserID) {
-            console.log("pass1");
             BountyAttempt.getBountyAttemptsByUser(req.body.UserID)
             .then(function(attempts){
-                console.log("pass2");
                 if (bounty.MaxAttempts === 0 || attempts.length < bounty.MaxAttempts) {
                     next();
                 }

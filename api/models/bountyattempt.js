@@ -10,6 +10,8 @@ class BountyAttempt{
         this.Proof = obj.Proof;
         this.DateAdded = obj.DateAdded;
         this.Confirmed = obj.Confirmed;
+
+        this.Username = obj.Username;
     }
 
     ToDBObject(){
@@ -22,6 +24,24 @@ class BountyAttempt{
         }
     }
 }
+
+BountyAttempt.getConfirmedBountyAttempt = function(bountyId) {
+    return new Promise(function(success, fail) {
+        sql.query("SELECT ba.*, IFNULL(u.Username, 'Unknown User') as 'Username' FROM bountyattempts ba LEFT JOIN users u On ba.UserID = u.ID WHERE BountyID = ? AND Confirmed = TRUE ORDER BY DateAdded DESC LIMIT 1", bountyId, function(err, res) {
+            if (err) {
+                console.log(err);
+                fail(err);
+            }
+            else {
+                var attempts = [];
+                for (var i = 0; i < res.length; i++) {
+                    attempts.push(new BountyAttempt(res[i]));
+                }
+                success(attempts);
+            }
+        })
+    });
+};
 
 BountyAttempt.getBountyAttemptsByBounty = function(bountyId) {
     return new Promise(function(success, fail) {
