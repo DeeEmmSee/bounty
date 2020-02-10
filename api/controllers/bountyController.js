@@ -174,6 +174,34 @@ exports.getBountyContribution = function(req, res) {
     }
 };
 
+exports.isValidBountyAttempt = function(req, res, next) {
+    Bounty.getBounty(req.body.BountyID)
+    .then(function(bounty) {
+        if (bounty.CreatedBy !== req.body.UserID) {
+            console.log("pass1");
+            BountyAttempt.getBountyAttemptsByUser(req.body.UserID)
+            .then(function(attempts){
+                console.log("pass2");
+                if (bounty.MaxAttempts === 0 || attempts.length < bounty.MaxAttempts) {
+                    next();
+                }
+                else {
+                    res.status(400).send("Invalid bounty attempt (Too many attempts)");
+                }
+            })
+            .catch(function (err) {
+                res.status(400).send("Invalid bounty attempt (catch getting attempts)");
+            });
+        }
+        else {
+            res.status(400).send("Invalid bounty attempt (Bounty was created by same user attempting)");
+        }
+    })
+    .catch (function(err) {
+        res.status(400).send("Invalid bounty attempt (catch getting bounty)");
+    });
+};
+
 exports.createBountyAttempt = function(req, res) {
     var bountyAttempt = new BountyAttempt(req.body);
     bountyAttempt.Confirmed = false;

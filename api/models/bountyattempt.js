@@ -1,5 +1,6 @@
 // MySQL
 const sql = require('../models/sql.js');
+var Bounty = require('../models/Bounty.js');
 
 class BountyAttempt{
     constructor(obj){
@@ -30,11 +31,11 @@ BountyAttempt.getBountyAttemptsByBounty = function(bountyId) {
                 fail(err);
             }
             else {
-                var contribs = [];
+                var attempts = [];
                 for (var i = 0; i < res.length; i++) {
-                    contribs.push(new BountyContribution(res[i]));
+                    attempts.push(new BountyAttempt(res[i]));
                 }
-                success(contribs);
+                success(attempts);
             }
         })
     });
@@ -48,11 +49,11 @@ BountyAttempt.getBountyAttemptsByUser = function(userId) {
                 fail(err);
             }
             else {
-                var contribs = [];
+                var attempts = [];
                 for (var i = 0; i < res.length; i++) {
-                    contribs.push(new BountyContribution(res[i]));
+                    attempts.push(new BountyAttempt(res[i]));
                 }
-                success(contribs);
+                success(attempts);
             }
         })
     });

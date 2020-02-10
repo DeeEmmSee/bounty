@@ -16,6 +16,7 @@ class CreateBountyComp extends React.Component {
             txtDescription: "",
             txtContributionAmount: "",
             chkAllowContributors: true,
+            txtMaxAttempts: "",
             errorMsg: "",
             showFormFields: true,
             showSuccess: false,
@@ -47,6 +48,11 @@ class CreateBountyComp extends React.Component {
             obj.CreatedDate = GetDBDate();
             obj.UpdatedDateTime = obj.createdDate;
             obj.Image = "https://www.w3schools.com/bootstrap4/la.jpg"; // TODO
+            obj.MaxAttempts = Number(this.state.txtMaxAttempts);
+
+            if (obj.MaxAttempts === NaN) {
+                obj.MaxAttempts = 0;
+            }
 
             SaveNewBountyFunc(obj)
             .then(resp => {
@@ -79,7 +85,7 @@ class CreateBountyComp extends React.Component {
     SaveBountyContrib(state, contObj) {
         SaveNewBountyContFunc(contObj)
         .then(function(contResponse) {
-            state.setState({showFormFields: false, showSuccess: true, newUrl: "/bounties/" + contObj.BountyID});
+            state.setState({showFormFields: false, showSuccess: true, newUrl: config.site_url + "/bounties/" + contObj.BountyID});
         })
         .catch(function(error) {
             console.log(error);
@@ -192,6 +198,15 @@ class CreateBountyComp extends React.Component {
                                 <input type="checkbox" name="chkAllowContributors" value={this.state.chkAllowContributors} className="form-check-input" onChange={this.HandleInputChange}/>
                                 <label htmlFor="chkAllowContributors">Allow Contributors</label><br />
                                 <small>If you don't want anyone else to contribute towards the bounty pot (i.e. a set amount) then leave this box unchecked.</small>
+                            </div>
+
+                            <hr />
+
+                            <h4>Attempts</h4>
+
+                            <div className="form-group">
+                                <label htmlFor="txtMaxAttempts">Max Attempts (For unlimited attempts leave as blank or set to 0)</label>
+                                <input type="text" name="txtMaxAttempts" placeholder="0" value={this.state.txtMaxAttempts} className="form-control" onChange={this.HandleInputChange}/>
                             </div>
 
                             <hr />

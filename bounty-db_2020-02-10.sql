@@ -31,6 +31,7 @@ CREATE TABLE `bounties` (
   `ClaimedBy` int(11) DEFAULT NULL,
   `ClaimedDate` timestamp NULL DEFAULT NULL,
   `UpdatedDateTime` timestamp NULL DEFAULT NULL,
+  `MaxAttempts` int(11) DEFAULT NULL,
   PRIMARY KEY (`ID`)
 ) ENGINE=InnoDB AUTO_INCREMENT=56 DEFAULT CHARSET=utf8;
 

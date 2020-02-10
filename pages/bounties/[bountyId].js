@@ -86,9 +86,6 @@ class BountyPage extends React.Component {
     SaveNewAttempt() {
         this.setState({errorMsgSubmitAttempt: ""});
 
-        console.log(this.state.bounty.UserID);
-        console.log(this.state.currentUserId);
-
         let urlProof = this.state.txtAttemptProof.toLowerCase();
 
         if (urlProof == "" || (urlProof.indexOf("youtube.com") < 0 && urlProof.indexOf("twitch.tv") < 0 )) {
@@ -154,12 +151,13 @@ class BountyPage extends React.Component {
                         ClaimedDate: {ToReadableDateString(this.state.bounty.ClaimedDate) }<br />
                         UpdatedDateTime: {ToReadableDateString(this.state.bounty.UpdatedDateTime) }<br />
                         TotalAmount: ${this.state.bounty.TotalAmount }<br />
+                        Max Attempts: {this.state.bounty.MaxAttempts }<br />
                         
                         <br />
 
                         <h4>Attempts</h4>
                         {
-                            this.state.bounty.Status == 1 && <a href="#" data-toggle="modal" data-target="#newAttemptModal">Click here to submit an attempt</a>
+                            this.state.bounty.Status == 1 && this.state.bounty.CreatedBy !== this.state.currentUserId && <a href="#" data-toggle="modal" data-target="#newAttemptModal">Click here to submit an attempt</a>
                         }
                         
                         <div className="modal fade" id="newAttemptModal" tabIndex="-1" role="dialog" aria-labelledby="newAttemptModalLabel" aria-hidden="true">
@@ -176,12 +174,12 @@ class BountyPage extends React.Component {
                                             <div className="col-sm-12">
                                                 <label>Link to proof (Must be a valid Youtube/Twitch URL)</label><br />
                                                 <input type="text" name="txtAttemptProof" value={this.state.txtAttemptProof} className="form-control" placeholder="" onChange={this.HandleInputChange.bind(this)}/>
+                                                <span style={{"color": "red"}}>{this.state.errorMsgSubmitAttempt}</span>
                                             </div>
                                         </div>
                                     </div>
                                     <div className="modal-footer">
                                         <button onClick={this.SaveNewAttempt.bind(this)} className="btn btn-primary">Submit</button><br />
-                                        <span style={{"color": "red"}}>{this.state.errorMsgSubmitAttempt}</span>
                                     </div>
                                 </div>
                             </div>
@@ -213,6 +211,7 @@ class BountyPage extends React.Component {
                                                     <span className="input-group-text" id="basic-addon1">$</span>
                                                 </div>
                                                 <input type="text" name="txtContributionAmount" value={this.state.txtContributionAmount} className="form-control" placeholder="0" onChange={this.HandleInputChange.bind(this)}/>
+                                                <span style={{"color": "red"}}>{this.state.errorMsgContribution}</span>
                                             </div>
                                             <p>
                                                 By clicking this button you agree to pay the user that successfully claimed this bounty the amount entered in the box above. It is your responsibility to ensure that all payments are made in good time after the bounty has been claimed. 
@@ -223,7 +222,6 @@ class BountyPage extends React.Component {
                                     </div>
                                     <div className="modal-footer">
                                         <button onClick={this.SaveNewContribution.bind(this)} className="btn btn-primary">Add Contribution</button>
-                                        <span style={{"color": "red"}}>{this.state.errorMsgContribution}</span>
                                     </div>
                                 </div>
                             </div>

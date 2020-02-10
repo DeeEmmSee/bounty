@@ -18,7 +18,8 @@ class Bounty {
         this.ClaimedBy = obj.ClaimedBy;
         this.ClaimedDate = obj.ClaimedDate;
         this.UpdatedDateTime = obj.UpdatedDateTime;
-    
+        this.MaxAttempts = obj.MaxAttempts;
+
         // Calculated
         this.TotalAmount = obj.TotalAmount;
         this.Contributors = [];
@@ -56,7 +57,8 @@ class Bounty {
             "CreatedDate": this.CreatedDate,
             "ClaimedBy": this.ClaimedBy,
             "ClaimedDate": this.ClaimedDate,
-            "UpdatedDateTime": this.UpdatedDateTime
+            "UpdatedDateTime": this.UpdatedDateTime,
+            "MaxAttempts": this.MaxAttempts
         };
     }
 }
@@ -82,11 +84,11 @@ class Bounty {
 
 Bounty.getBounties = function(where, order, orderDesc, limit) {
     return new Promise(function(success, fail) {
-        var query = "SELECT b.`ID`, b.`GameID`, b.`Title`, b.`BountyCondition`, b.`Description`, b.`Image`, b.`Status`, b.`AllowContributors`, b.`Featured`, b.`CreatedBy`, b.`CreatedDate`, b.`ClaimedBy`, b.`ClaimedDate`, b.`UpdatedDateTime`, IFNULL(u.`Username`, 'N/A') as 'CreatedByUsername', IFNULL(u2.`Username`, 'N/A') as 'ClaimedByUsername', IFNULL(SUM(bc.`Amount`), 0) as 'TotalAmount' FROM bounties b LEFT JOIN users u ON b.CreatedBy = u.ID LEFT JOIN users u2 ON b.ClaimedBy = u.ID LEFT JOIN bountycontributions bc ON b.ID = bc.BountyID";
+        var query = "SELECT b.`ID`, b.`GameID`, b.`Title`, b.`BountyCondition`, b.`Description`, b.`Image`, b.`Status`, b.`AllowContributors`, b.`Featured`, b.`CreatedBy`, b.`CreatedDate`, b.`ClaimedBy`, b.`ClaimedDate`, b.`UpdatedDateTime`, `b`.`MaxAttempts`, IFNULL(u.`Username`, 'N/A') as 'CreatedByUsername', IFNULL(u2.`Username`, 'N/A') as 'ClaimedByUsername', IFNULL(SUM(bc.`Amount`), 0) as 'TotalAmount' FROM bounties b LEFT JOIN users u ON b.CreatedBy = u.ID LEFT JOIN users u2 ON b.ClaimedBy = u.ID LEFT JOIN bountycontributions bc ON b.ID = bc.BountyID";
 
         if (where != "" && where != null){ query += " WHERE " + where; }
 
-        query += " GROUP BY b.`ID`, b.`GameID`, b.`Title`, b.`BountyCondition`, b.`Description`, b.`Image`, b.`Status`, b.`AllowContributors`, b.`Featured`, b.`CreatedBy`, b.`CreatedDate`, b.`ClaimedBy`, b.`ClaimedDate`, b.`UpdatedDateTime`, IFNULL(u.`Username`, 'N/A'), IFNULL(u2.`Username`, 'N/A')";
+        query += " GROUP BY b.`ID`, b.`GameID`, b.`Title`, b.`BountyCondition`, b.`Description`, b.`Image`, b.`Status`, b.`AllowContributors`, b.`Featured`, b.`CreatedBy`, b.`CreatedDate`, b.`ClaimedBy`, b.`ClaimedDate`, b.`UpdatedDateTime`, `b`.`MaxAttempts`, IFNULL(u.`Username`, 'N/A'), IFNULL(u2.`Username`, 'N/A')";
 
         if (order != "" && order != null){ query += " ORDER BY " + order; query += orderDesc ? " DESC" : ""; }
         if (limit != "" && limit != null){ query += " LIMIT " + limit; }

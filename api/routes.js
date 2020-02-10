@@ -36,7 +36,7 @@ module.exports = function(app, passport) {
 
     app.route('/api/bounties/bountyattempt')
         .get([passport.authenticate('jwt'), bountyController.getBountyAttempts])
-        .post([bountyController.createBountyAttempt]);
+        .post([bountyController.isValidBountyAttempt, bountyController.createBountyAttempt]);
 
     app.route('/api/users/user')
         //.get([passport.authenticate('jwt'), userController.getUser])
