@@ -1,5 +1,6 @@
 var Bounty = require("../models/bounty.js");
 var BountyContribution = require("../models/bountycontribution.js");
+var BountyAttempt = require("../models/bountyattempt.js");
 
 function GetLimit(defaultValue, newValue) {
     if (newValue != 'undefined' && newValue != undefined && newValue != NaN){
@@ -171,5 +172,42 @@ exports.getBountyContribution = function(req, res) {
             res.status(500).send(err);
         });
     }
+};
+
+exports.createBountyAttempt = function(req, res) {
+    var bountyAttempt = new BountyAttempt(req.body);
+    bountyAttempt.Confirmed = false;
     
+    BountyAttempt.createBountyAttempt(bountyAttempt)
+    .then(function(bountyAttemptId) {
+        res.status(200).send(bountyAttemptId);
+    })
+    .catch(function(err) {
+        console.log(err);
+        res.status(500).send(err);
+    });
+};
+
+exports.getBountyAttempts = function(req, res) {
+    if (req.query.type == "bounty") {
+        BountyAttempt.getBountyAttemptsByBounty(req.query.id)
+        .then(function(attempts) {
+            res.status(200).send(attempts);
+        })
+        .catch(function(err) {
+            res.status(500).send(err);
+        });
+    }
+    else if (req.query.type == "user") {
+        BountyAttempt.getBountyAttemptsByUser(req.query.id)
+        .then(function(attempts) {
+            res.status(200).send(attempts);
+        })
+        .catch(function(err) {
+            res.status(500).send(err);
+        });
+    }
+    else {
+
+    }
 };

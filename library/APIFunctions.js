@@ -74,6 +74,17 @@ export async function GetUser(userId){
     return axios.post(config.api_url + '/api/users/user', {params: {'userId': userId}});
 }
 
+export async function SaveNewAttempt(obj){
+    return axios.post(config.api_url + '/api/bounties/bountyattempt', obj);
+}
+
+export async function GetBountyAttemptsByBounty(bountyId){
+    return axios.get(config.api_url + '/api/bounties/bountyattempt',  {params: {'type': 'bounty', 'id': bountyId}});
+}
+
+export async function GetBountyAttemptsByUser(userID){
+    return axios.get(config.api_url + '/api/bounties/bountyattempt',  {params: {'type': 'user', 'id': userID}});
+}
 // export default function APIFunctions() {
     
 // }
