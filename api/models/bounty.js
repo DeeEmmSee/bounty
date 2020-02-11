@@ -116,6 +116,7 @@ Bounty.getBounties = function(where, order, orderDesc, limit) {
         if (order != "" && order != null){ query += " ORDER BY " + order; query += orderDesc ? " DESC" : ""; }
         if (limit != "" && limit != null){ query += " LIMIT " + limit; }
 
+        console.log(query);
         sql.query(query, function(err, res) {
             if (err) {
                 console.log(err);
@@ -253,6 +254,20 @@ Bounty.createBounty = function(bounty) {
 Bounty.updateBounty = function(bounty) {
     return new Promise(function(success, fail) {
         sql.query("UPDATE bounties SET ? WHERE ID = ?", [bounty.ToDBObject(), bounty.ID], function(err, res) {
+            if (err) {
+                console.log(err);
+                fail(err);
+            }
+            else {
+                success(res.insertId.toString());
+            }
+        })
+    });
+}
+
+Bounty.updateBountyStatus = function(statusID, bountyID) {
+    return new Promise(function(success, fail) {
+        sql.query("UPDATE bounties SET StatusID = ? WHERE ID = ?", [statusID, bountyID], function(err, res) {
             if (err) {
                 console.log(err);
                 fail(err);

@@ -1,5 +1,6 @@
 // MySQL
 const sql = require('../models/sql.js');
+var Bounty = require('../models/Bounty.js');
 
 const fields = "`bc`.`ID`, `bc`.`BountyID`, `bc`.`UserID`, `bc`.`Amount`, `bc`.`DateAdded`, `bc`.`Paid`, `bc`.`DatePaid`";
 

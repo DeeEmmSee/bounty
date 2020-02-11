@@ -240,8 +240,20 @@ exports.getBountyAttempts = function(req, res) {
 
 exports.setBountyContributionAsPaid = function(req, res) {
     BountyContribution.setBountyContributionAsPaid(req.body.id)
-    .then(function(id) {
-        res.status(200).send(id);
+    .then(function(msg) {
+        // Check bounty has no more outstanding contributions
+        Bounty.getBounty(req.body.bountyId)
+        .then(function(bounty) {
+            if (bounty.Contributors.filter(c => { return !c.Paid}).length === 0) {
+                console.log("No more to pay");
+                Bounty.updateBountyStatus(3, bounty.ID);
+            }
+            
+            res.status(200).send("Success");
+        })
+        .catch(function(err) {
+            res.status(500).send(err);
+        });        
     })
     .catch(function(err) {
         res.status(500).send(err);

@@ -32,14 +32,13 @@ class MyContributionsComp extends React.Component {
         });
     }
 
-    SetAsPaid(contribID, amount, claimedUser){
+    SetAsPaid(contrib){
         let state = this;
         state.setState({loaded: false});
 
-        if (confirm("By clicking OK you are agreed that $" + amount + " has successfully been paid to " + claimedUser + " and that this contribution can be closed")) {
-            SetBountyContributionAsPaid(contribID)
+        if (confirm("By clicking OK you are agreed that $" + contrib.Amount + " has successfully been paid to " + contrib.BountyClaimedBy + " and that this contribution can be closed")) {
+            SetBountyContributionAsPaid(contrib.ID, contrib.BountyID)
             .then(res => {
-                console.log(res.data);
                 state.GetContributions(false);
             })
             .catch(err => {
@@ -56,7 +55,7 @@ class MyContributionsComp extends React.Component {
                 <td>${contrib.Amount}</td>
                 <td>{ToReadableDateString(contrib.DateAdded)}</td>
                 <td>{contrib.BountyClaimedBy}</td>
-                <td>{!contrib.Paid && contrib.BountyStatus == 2 ? <button className="btn btn-primary" onClick={this.SetAsPaid.bind(this, contrib.ID, contrib.Amount, contrib.BountyClaimedBy)}>Mark as Paid</button> : ToReadableDateString(contrib.DatePaid) }</td>
+                <td>{!contrib.Paid && contrib.BountyStatus == 2 ? <button className="btn btn-primary" onClick={this.SetAsPaid.bind(this, contrib)}>Mark as Paid</button> : ToReadableDateString(contrib.DatePaid) }</td>
             </tr>
         );
         

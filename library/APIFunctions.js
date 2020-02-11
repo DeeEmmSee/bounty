@@ -94,8 +94,8 @@ export async function GetBountyContributionsByUser(userID){
     return axios.get(config.api_url + '/api/bounties/bountycontribution',  {params: {'type': 'user', 'id': userID}});
 }
 
-export async function SetBountyContributionAsPaid(ID){
-    return axios.patch(config.api_url + '/api/bounties/bountycontribution',  {'id': ID});
+export async function SetBountyContributionAsPaid(ID, bountyID){
+    return axios.patch(config.api_url + '/api/bounties/bountycontribution',  {'id': ID, 'bountyID': bountyID});
 }
 
 
