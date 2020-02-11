@@ -33,7 +33,6 @@ class ProfileComp extends React.Component {
 
         GetProfileStats(this.state.currentUserId)
         .then(res => {
-            console.log(res.data);
             state.setState({pendingAttempts: res.data.pendingAttempts, myBounties: res.data.myBounties, myAttempts: res.data.myAttempts, myContributions: res.data.myContributions});
         })
         .catch(err => {

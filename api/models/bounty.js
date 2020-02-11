@@ -31,7 +31,9 @@ class Bounty {
         this.ClaimedByUsername = obj.ClaimedByUsername;
         this.Attempts = [];
         this.ConfirmedAttempt = {};
+        //this.PendingAttempts = [];
     }
+
 
     SetAttempts(attempts){
         this.Attempts = attempts;
@@ -45,6 +47,8 @@ class Bounty {
             else {
                 this.ConfirmedAttempt = confirmedAttempt
             }
+
+            //this.PendingAttempts = this.Attempts.filter(ba => { return ba.StatusID === 0; });
         }
         else {
             this.ConfirmedAttempt = {};

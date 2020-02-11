@@ -32,6 +32,7 @@
 
 .profilemenu {
     cursor: pointer;
+    padding: 5px;
 }
 
 .profilemenu:hover {
@@ -40,4 +41,5 @@
 
 .profilemenu.active {
     border: solid black 1px;
+    border-radius: 5px;
 }

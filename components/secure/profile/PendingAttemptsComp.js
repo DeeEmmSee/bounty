@@ -8,9 +8,12 @@ class PendingAttemptsComp extends React.Component {
 
         this.state = {
             bounties: [],
-            selectedBounty: null,
+            selectedBounty: {
+                Attempts: []
+            },
             currentUserId: cookieData.userId,
-            loaded: false
+            loaded: false,
+            initialValue: true
         };
 
         this.GetBounties(true);
@@ -43,18 +46,23 @@ class PendingAttemptsComp extends React.Component {
             let bounty = this.state.bounties.find(b => { return b.ID == evt.target.value}); // Needs to be 2x '=' because casting
 
             if (bounty !== undefined && bounty !== 'undefined') {
-                this.setState({selectedBounty: bounty});
+                this.setState({selectedBounty: bounty, initialValue: false});
             }
         }
         else {
-            this.setState({selectedBounty: null});
+            this.setState({initialValue: true});
         }
     }
 
     render() {
-        const BountyOptions = this.state.bounties.filter(b => { return b.Status === 1; }).map((bounty, key) => 
-            <option key={key} value={bounty.ID}>{bounty.Title}</option>
+        const BountyOptions = this.state.bounties.filter(b => { return b.Status === 1 && b.Attempts.filter(ba => { return ba.StatusID === 0; }).length; }).map((bounty, key) => 
+            <option key={key} value={bounty.ID}>{bounty.Title} ({bounty.Attempts.filter(ba => { return ba.StatusID === 0; }).length})</option>
         );
+
+        const BountyAttempts = this.state.selectedBounty.Attempts.filter(ba => { return ba.StatusID === 0; }).sort((a, b) => { return b.DateAdded > a.DateAdded ? 1 : -1; }).map((ba, key) => 
+            <li key={key}>{ba.UserID}</li>
+        );
+
 
         return(
             <div>
@@ -66,9 +74,13 @@ class PendingAttemptsComp extends React.Component {
                 </div>
 
 
-                { this.state.selectedBounty !== null && 
+                { !this.state.initialValue && 
                     <div>
                         <h4>{this.state.selectedBounty.Title}</h4>
+
+                        <ul>
+                            {BountyAttempts}
+                        </ul>
                     </div>
                 }
             </div>
