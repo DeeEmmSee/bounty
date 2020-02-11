@@ -45,7 +45,7 @@ export function GetDBDate() {
     return new Date().toISOString().slice(0, 19).replace('T', ' ');
 }
 
-export function GetStatus(statusID){
+export function GetBountyStatus(statusID){
     if (statusID === 1) {
         return "Open";
     }
@@ -54,6 +54,21 @@ export function GetStatus(statusID){
     }
     else if (statusID === 3) {
         return "Closed";
+    }
+    else {
+        return "";
+    }
+}
+
+export function GetAttemptStatus(statusID){
+    if (statusID === -1) {
+        return "Rejected";
+    }
+    else if (statusID === 0) {
+        return "Processing";
+    }
+    else if (statusID === 1) {
+        return "Accepted";
     }
     else {
         return "";

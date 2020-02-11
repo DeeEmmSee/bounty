@@ -1,6 +1,8 @@
 // MySQL
 const sql = require('../models/sql.js');
 
+const fields = "`bc`.`ID`, `bc`.`BountyID`, `bc`.`UserID`, `bc`.`Amount`, `bc`.`DateAdded`, `bc`.`Paid`, `bc`.`DatePaid`";
+
 class BountyContribution{
     constructor(obj){
         this.BountyID = obj.BountyID;
@@ -9,6 +11,7 @@ class BountyContribution{
         this.Username = obj.Username;
         this.DateAdded = obj.DateAdded;
         this.DatePaid = obj.DatePaid;
+        this.Paid = obj.Paid;
 
         this.Username = obj.Username;
         this.BountyName = obj.BountyName;
@@ -21,13 +24,15 @@ class BountyContribution{
             "Amount": this.Amount,
             "DateAdded": this.DateAdded,
             "DatePaid": this.DatePaid,
+            "Paid": this.Paid
         }
     }
 }
 
+
 BountyContribution.getBountyContributionByBounty = function(bountyId) {
     return new Promise(function(success, fail) {
-        sql.query("SELECT bc.*, IFNULL(u.Username, 'Unknown User') as 'Username', IFNULL(b.Title, 'Unknown Bounty') as 'BountyName' FROM bountycontributions bc LEFT JOIN users u On bc.UserID = u.ID LEFT JOIN bounties b ON bc.BountyID = b.ID WHERE BountyID = ? ORDER BY DateAdded DESC", bountyId, function(err, res) {
+        sql.query("SELECT " + fields + ", IFNULL(u.Username, 'Unknown User') as 'Username', IFNULL(b.Title, 'Unknown Bounty') as 'BountyName' FROM bountycontributions bc LEFT JOIN users u On bc.UserID = u.ID LEFT JOIN bounties b ON bc.BountyID = b.ID WHERE BountyID = ? ORDER BY DateAdded DESC", bountyId, function(err, res) {
             if (err) {
                 console.log(err);
                 fail(err);
@@ -45,7 +50,7 @@ BountyContribution.getBountyContributionByBounty = function(bountyId) {
 
 BountyContribution.getBountyContributionByUser = function(userId) {
     return new Promise(function(success, fail) {
-        sql.query("SELECT bc.*, IFNULL(u.Username, 'Unknown User') as 'Username', IFNULL(b.Title, 'Unknown Bounty') as 'BountyName' FROM bountycontributions bc LEFT JOIN users u On bc.UserID = u.ID LEFT JOIN bounties b ON bc.BountyID = b.ID WHERE UserID = ? ORDER BY DateAdded DESC", userId, function(err, res) {
+        sql.query("SELECT " + fields + ", IFNULL(u.Username, 'Unknown User') as 'Username', IFNULL(b.Title, 'Unknown Bounty') as 'BountyName' FROM bountycontributions bc LEFT JOIN users u On bc.UserID = u.ID LEFT JOIN bounties b ON bc.BountyID = b.ID WHERE UserID = ? ORDER BY DateAdded DESC", userId, function(err, res) {
             if (err) {
                 console.log(err);
                 fail(err);

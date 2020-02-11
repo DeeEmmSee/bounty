@@ -1,7 +1,7 @@
 import Layout from '../../components/Layout';
 import { GetUser as GetUserFunc } from '../../library/APIFunctions';
 import { withRouter } from 'next/router';
-import {ToReadableDateString, GetStatus, GetDBDate, GetCookieData} from '../../library/common';
+import {ToReadableDateString, GetDBDate, GetCookieData} from '../../library/common';
 
 class ProfilePage extends React.Component {
     constructor(props){

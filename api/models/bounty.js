@@ -4,6 +4,8 @@ var BountyContribution = require('../models/BountyContribution.js');
 var Game = require('../models/Game.js');
 var BountyAttempt = require('../models/bountyattempt.js');
 
+const fields = "b.`ID`, b.`GameID`, b.`Title`, b.`BountyCondition`, b.`Description`, b.`Image`, b.`Status`, b.`AllowContributors`, b.`Featured`, b.`CreatedBy`, b.`CreatedDate`, b.`ClaimedBy`, b.`ClaimedDate`, b.`UpdatedDateTime`, `b`.`MaxAttempts`";
+
 class Bounty {
     constructor(obj){
         this.ID = obj.ID;
@@ -35,7 +37,7 @@ class Bounty {
         this.Attempts = attempts;
 
         if (attempts.length > 0) {
-            let confirmedAttempt = attempts.find((attempt) => { return attempt.Confirmed });
+            let confirmedAttempt = attempts.find((attempt) => { return attempt.StatusID === 1 });
 
             if (confirmedAttempt === undefined || confirmedAttempt === 'undefined') {
                 this.ConfirmedAttempt = {};
@@ -105,11 +107,11 @@ class Bounty {
 
 Bounty.getBounties = function(where, order, orderDesc, limit) {
     return new Promise(function(success, fail) {
-        var query = "SELECT b.`ID`, b.`GameID`, b.`Title`, b.`BountyCondition`, b.`Description`, b.`Image`, b.`Status`, b.`AllowContributors`, b.`Featured`, b.`CreatedBy`, b.`CreatedDate`, b.`ClaimedBy`, b.`ClaimedDate`, b.`UpdatedDateTime`, `b`.`MaxAttempts`, IFNULL(u.`Username`, 'N/A') as 'CreatedByUsername', IFNULL(u2.`Username`, 'N/A') as 'ClaimedByUsername', IFNULL(SUM(bc.`Amount`), 0) as 'TotalAmount' FROM bounties b LEFT JOIN users u ON b.CreatedBy = u.ID LEFT JOIN users u2 ON b.ClaimedBy = u.ID LEFT JOIN bountycontributions bc ON b.ID = bc.BountyID";
+        var query = "SELECT " + fields + ", IFNULL(u.`Username`, 'N/A') as 'CreatedByUsername', IFNULL(u2.`Username`, 'N/A') as 'ClaimedByUsername', IFNULL(SUM(bc.`Amount`), 0) as 'TotalAmount' FROM bounties b LEFT JOIN users u ON b.CreatedBy = u.ID LEFT JOIN users u2 ON b.ClaimedBy = u.ID LEFT JOIN bountycontributions bc ON b.ID = bc.BountyID";
 
         if (where != "" && where != null){ query += " WHERE " + where; }
 
-        query += " GROUP BY b.`ID`, b.`GameID`, b.`Title`, b.`BountyCondition`, b.`Description`, b.`Image`, b.`Status`, b.`AllowContributors`, b.`Featured`, b.`CreatedBy`, b.`CreatedDate`, b.`ClaimedBy`, b.`ClaimedDate`, b.`UpdatedDateTime`, `b`.`MaxAttempts`, IFNULL(u.`Username`, 'N/A'), IFNULL(u2.`Username`, 'N/A')";
+        query += " GROUP BY " + fields + ", IFNULL(u.`Username`, 'N/A'), IFNULL(u2.`Username`, 'N/A')";
 
         if (order != "" && order != null){ query += " ORDER BY " + order; query += orderDesc ? " DESC" : ""; }
         if (limit != "" && limit != null){ query += " LIMIT " + limit; }
@@ -143,22 +145,25 @@ Bounty.getBounties = function(where, order, orderDesc, limit) {
                     Promise.all(promises)
                     .then(function(vals){
                         let bountyCount = 0;
+                        var tmpCount = 0;
 
                         for (var i = 0; i < vals.length; i++) {
-                            var tmpI = i + 1;
 
-                            if (tmpI % 3 == 0) { // 3rd
+                            if (tmpCount == 2) { // 3rd
                                 bounties[bountyCount].SetAttempts(vals[i]);
                                 bountyCount++;
+                                tmpCount = 0;
                             }
-                            else if (tmpI % 2 == 0) { // 2nd
+                            else if (tmpCount == 1) { // 2nd
                                 bounties[bountyCount].SetContributors(vals[i]);
+                                tmpCount++;
                             }
                             else { // 1st
                                 bounties[bountyCount].SetGame(vals[i]);
+                                tmpCount++;
                             }
                         }
-                        //console.log(bounties);
+                        
                         success(bounties);
                     })
                     .catch(function(err){
@@ -176,7 +181,7 @@ Bounty.getBounties = function(where, order, orderDesc, limit) {
 
 Bounty.getBounty = function(bountyId) {
     return new Promise(function(success, fail) {
-        sql.query("SELECT b.*, IFNULL(u.Username, 'N/A') as 'CreatedByUsername', IFNULL(u2.Username, 'N/A') as 'ClaimedByUsername' FROM bounties b LEFT JOIN users u ON b.CreatedBy = u.ID LEFT JOIN users u2 ON b.ClaimedBy = u.ID WHERE b.ID = ?", bountyId, function(err, res) {
+        sql.query("SELECT " + fields + ", IFNULL(u.Username, 'N/A') as 'CreatedByUsername', IFNULL(u2.Username, 'N/A') as 'ClaimedByUsername' FROM bounties b LEFT JOIN users u ON b.CreatedBy = u.ID LEFT JOIN users u2 ON b.ClaimedBy = u.ID WHERE b.ID = ?", bountyId, function(err, res) {
             if (err) {
                 console.log(err);
                 fail(err);
@@ -199,17 +204,19 @@ Bounty.getBounty = function(bountyId) {
 
                     Promise.all(promises)
                     .then(function(vals){
+                        var tmpCount = 0;
                         for (var i = 0; i < vals.length; i++){
-                            var tmpI = i + 1;
-                           
-                            if (tmpI % 3 == 0) { 
+                            if (tmpCount == 2) { 
                                 bounty.SetAttempts(vals[i]);
+                                tmpCount = 0;
                             }
-                            else if (tmpI % 2 == 0) { // Even, contribs
+                            else if (tmpCount == 1) { // Even, contribs
                                 bounty.SetContributors(vals[i]);
+                                tmpCount++;
                             }
                             else {
                                 bounty.SetGame(vals[i]);
+                                tmpCount++;
                             }
                         }
 

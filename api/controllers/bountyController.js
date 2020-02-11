@@ -202,7 +202,7 @@ exports.isValidBountyAttempt = function(req, res, next) {
 
 exports.createBountyAttempt = function(req, res) {
     var bountyAttempt = new BountyAttempt(req.body);
-    bountyAttempt.Confirmed = false;
+    bountyAttempt.StatusID = 0;
     
     BountyAttempt.createBountyAttempt(bountyAttempt)
     .then(function(bountyAttemptId) {

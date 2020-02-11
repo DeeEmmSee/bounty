@@ -1,5 +1,5 @@
 import {GetBountyAttemptsByUser} from '../../../library/APIFunctions';
-import {ToReadableDateString, GetCookieData} from '../../../library/common';
+import {ToReadableDateString, GetCookieData, GetAttemptStatus} from '../../../library/common';
 
 class MyAttemptsComp extends React.Component {
     constructor(props){
@@ -38,6 +38,7 @@ class MyAttemptsComp extends React.Component {
                 <td>{attempt.BountyName}</td>
                 <td>{attempt.Proof}</td>
                 <td>{ToReadableDateString(attempt.DateAdded)}</td>
+                <td>{GetAttemptStatus(attempt.StatusID)}</td>
             </tr>
         );
         
@@ -50,6 +51,7 @@ class MyAttemptsComp extends React.Component {
                                 <th>Bounty</th>
                                 <th>Proof</th>
                                 <th>Date</th>
+                                <th>Status</th>
                             </tr>
                         </thead>
                         <tbody>

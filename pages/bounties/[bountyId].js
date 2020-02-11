@@ -1,7 +1,7 @@
 import Layout from '../../components/Layout';
 import { GetBounty as GetBountyFunc, SaveNewBountyContribution as SaveNewContribFunc, SaveNewAttempt as SaveNewAttemptFunc } from '../../library/APIFunctions';
 import { withRouter } from 'next/router';
-import {ToReadableDateString, GetStatus, GetDBDate, GetCookieData} from '../../library/common';
+import {ToReadableDateString, GetBountyStatus, GetDBDate, GetCookieData} from '../../library/common';
 
 class BountyPage extends React.Component {
     constructor(props){
@@ -170,7 +170,7 @@ class BountyPage extends React.Component {
                         {/* Game: {this.state.bounty.Game.Name }<br /> */}
                         Condition: {this.state.bounty.BountyCondition }<br />
                         Description: {this.state.bounty.Description }<br />
-                        Status: {GetStatus(this.state.bounty.Status) }<br />
+                        Status: {GetBountyStatus(this.state.bounty.Status) }<br />
                         CreatedBy: {this.state.bounty.CreatedByUsername }<br />
                         CreatedDate: {ToReadableDateString(this.state.bounty.CreatedDate) }<br />
                         ClaimedBy: {this.state.bounty.ClaimedByUsername }<br />
