@@ -5,6 +5,7 @@ const fields = "`bc`.`ID`, `bc`.`BountyID`, `bc`.`UserID`, `bc`.`Amount`, `bc`.`
 
 class BountyContribution{
     constructor(obj){
+        this.ID = obj.ID;
         this.BountyID = obj.BountyID;
         this.UserID = obj.UserID;
         this.Amount = obj.Amount;
@@ -75,6 +76,20 @@ BountyContribution.createBountyContribution = function(bountyContribution) {
             }
             else {
                 success(res.insertId.toString());
+            }
+        })
+    });
+};
+
+BountyContribution.setBountyContributionAsPaid = function(contribID) {
+    return new Promise(function(success, fail) {
+        sql.query("UPDATE bountycontributions SET Paid = TRUE, DatePaid = CURRENT_TIMESTAMP WHERE ID = " + contribID, function(err, res) {
+            if (err) {
+                console.log(err);
+                fail(err);
+            }
+            else {
+                success("Success!");
             }
         })
     });

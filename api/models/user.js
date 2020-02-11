@@ -1,5 +1,6 @@
 // MySQL
 const sql = require('../models/sql.js');
+const fields = "`ID`,`Username`,`Password`,`Email`,`DateRegistered`,`LastLoggedInDate`,`Avatar`";
 
 class User{
     constructor(obj){
@@ -27,7 +28,7 @@ class User{
 
 User.getUser = function(userId) {
     return new Promise(function(success, fail) {
-        sql.query("SELECT * FROM users WHERE ID = ?", userId, function(err, res) {
+        sql.query("SELECT " + fields + " FROM users WHERE ID = ?", userId, function(err, res) {
             if (err) {
                 console.log(err);
                 fail(err);
@@ -42,7 +43,7 @@ User.getUser = function(userId) {
 
 User.getUserByEmail = function(email) {
     return new Promise(function(success, fail) {
-        sql.query("SELECT * FROM users WHERE Email = ?", email, function(err, res) {
+        sql.query("SELECT " + fields + " FROM users WHERE Email = ?", email, function(err, res) {
             if (err) {
                 console.log(err);
                 fail(err);

@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import {GetBountyAttemptsByUser} from '../../../library/APIFunctions';
 import {ToReadableDateString, GetCookieData, GetAttemptStatus} from '../../../library/common';
 
@@ -34,9 +35,9 @@ class MyAttemptsComp extends React.Component {
 
     render() {
         const AttemptsList = this.state.attempts.map((attempt, key) =>
-            <tr style={{cursor: 'pointer'}} key={key}>
+            <tr key={key}>
                 <td>{attempt.BountyName}</td>
-                <td>{attempt.Proof}</td>
+                <td><Link href={attempt.Proof}><a>{attempt.Proof}</a></Link></td>
                 <td>{ToReadableDateString(attempt.DateAdded)}</td>
                 <td>{GetAttemptStatus(attempt.StatusID)}</td>
             </tr>

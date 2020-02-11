@@ -237,3 +237,13 @@ exports.getBountyAttempts = function(req, res) {
 
     }
 };
+
+exports.setBountyContributionAsPaid = function(req, res) {
+    BountyContribution.setBountyContributionAsPaid(req.body.id)
+    .then(function(id) {
+        res.status(200).send(id);
+    })
+    .catch(function(err) {
+        res.status(500).send(err);
+    });
+};

@@ -1,5 +1,6 @@
 // MySQL
 const sql = require('../models/sql.js');
+const fields = "`ID`,`Name`,`Year`,`Console`";
 
 class Game{
     constructor(obj){
@@ -21,7 +22,7 @@ class Game{
 
 Game.getAllGames = function() {
     return new Promise(function(success, fail) {
-        sql.query("SELECT * FROM games", function(err, res) {
+        sql.query("SELECT " + fields + " FROM games", function(err, res) {
             if (err) {
                 console.log(err);
                 fail(err);
@@ -39,7 +40,7 @@ Game.getAllGames = function() {
 
 Game.getGameById = function(ID) {
     return new Promise(function(success, fail) {
-        sql.query("SELECT * FROM games WHERE ID = ?", ID, function(err, res) {
+        sql.query("SELECT " + fields + " FROM games WHERE ID = ?", ID, function(err, res) {
             if (err) {
                 console.log(err);
                 fail(err);

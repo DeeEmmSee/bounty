@@ -33,7 +33,7 @@ CREATE TABLE `bounties` (
   `UpdatedDateTime` timestamp NULL DEFAULT NULL,
   `MaxAttempts` int(11) DEFAULT NULL,
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=56 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=57 DEFAULT CHARSET=utf8;
 
 /*Table structure for table `bountyattempts` */
 
@@ -45,9 +45,9 @@ CREATE TABLE `bountyattempts` (
   `BountyID` int(11) DEFAULT NULL,
   `Proof` varchar(128) DEFAULT NULL,
   `DateAdded` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-  `Confirmed` bit(1) DEFAULT NULL,
+  `StatusID` int(1) DEFAULT NULL,
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 /*Table structure for table `bountycontributions` */
 
@@ -59,19 +59,10 @@ CREATE TABLE `bountycontributions` (
   `UserID` int(11) NOT NULL,
   `Amount` decimal(10,2) NOT NULL,
   `DateAdded` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `Paid` bit(1) DEFAULT b'0',
   `DatePaid` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`ID`)
 ) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8;
-
-/*Table structure for table `bountystatus` */
-
-DROP TABLE IF EXISTS `bountystatus`;
-
-CREATE TABLE `bountystatus` (
-  `ID` int(11) NOT NULL AUTO_INCREMENT,
-  `Description` varchar(64) NOT NULL,
-  PRIMARY KEY (`ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 
 /*Table structure for table `games` */
 

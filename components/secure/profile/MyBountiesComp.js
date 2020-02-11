@@ -1,5 +1,5 @@
 import {GetBounties} from '../../../library/APIFunctions';
-import {ToReadableDateString, GetCookieData} from '../../../library/common';
+import {ToReadableDateString, GetCookieData, GetBountyStatus} from '../../../library/common';
 
 class MyBountiesComp extends React.Component {
     constructor(props){
@@ -48,6 +48,7 @@ class MyBountiesComp extends React.Component {
                 <td>{bounty.Title}</td>
                 <td>${bounty.TotalAmount}</td>
                 <td>{ToReadableDateString(bounty.CreatedDate)}</td>
+                <td>{GetBountyStatus(bounty.Status)}</td>
             </tr>
         );
 
@@ -59,6 +60,7 @@ class MyBountiesComp extends React.Component {
                             <th>Name</th>
                             <th>Current Amount</th>
                             <th>Created Date</th>
+                            <th>Status</th>
                         </tr>
                     </thead>
                     <tbody>

@@ -32,7 +32,8 @@ module.exports = function(app, passport) {
     app.route('/api/bounties/bountycontribution')
         .get([bountyController.getBountyContribution])
         //.post([passport.authenticate('jwt'), bountyController.createBountyContribution]);
-        .post([bountyController.createBountyContribution]);
+        .post([bountyController.createBountyContribution])
+        .patch([bountyController.setBountyContributionAsPaid]);
 
     app.route('/api/bounties/bountyattempt')
         .get([bountyController.getBountyAttempts])
