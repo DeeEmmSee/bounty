@@ -85,6 +85,18 @@ export async function GetBountyAttemptsByBounty(bountyId){
 export async function GetBountyAttemptsByUser(userID){
     return axios.get(config.api_url + '/api/bounties/bountyattempt',  {params: {'type': 'user', 'id': userID}});
 }
+
+export async function GetBountyContributionsByBounty(bountyId){
+    return axios.get(config.api_url + '/api/bounties/bountycontribution',  {params: {'type': 'bounty', 'id': bountyId}});
+}
+
+export async function GetBountyContributionsByUser(userID){
+    return axios.get(config.api_url + '/api/bounties/bountycontribution',  {params: {'type': 'user', 'id': userID}});
+}
+
+
+
+
 // export default function APIFunctions() {
     
 // }

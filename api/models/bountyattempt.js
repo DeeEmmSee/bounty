@@ -12,6 +12,7 @@ class BountyAttempt{
         this.Confirmed = obj.Confirmed;
 
         this.Username = obj.Username;
+        this.BountyName = obj.BountyName;
     }
 
     ToDBObject(){
@@ -27,7 +28,7 @@ class BountyAttempt{
 
 BountyAttempt.getConfirmedBountyAttempt = function(bountyId) {
     return new Promise(function(success, fail) {
-        sql.query("SELECT ba.*, IFNULL(u.Username, 'Unknown User') as 'Username' FROM bountyattempts ba LEFT JOIN users u On ba.UserID = u.ID WHERE BountyID = ? AND Confirmed = TRUE ORDER BY DateAdded DESC LIMIT 1", bountyId, function(err, res) {
+        sql.query("SELECT ba.*, IFNULL(u.Username, 'Unknown User') as 'Username', IFNULL(b.Title, 'Unknown Bounty') as 'BountyName' FROM bountyattempts ba LEFT JOIN users u On ba.UserID = u.ID LEFT JOIN bounties b ON ba.BountyID = b.ID WHERE ba.BountyID = ? AND Confirmed = TRUE ORDER BY DateAdded DESC LIMIT 1", bountyId, function(err, res) {
             if (err) {
                 console.log(err);
                 fail(err);
@@ -45,7 +46,7 @@ BountyAttempt.getConfirmedBountyAttempt = function(bountyId) {
 
 BountyAttempt.getBountyAttemptsByBounty = function(bountyId) {
     return new Promise(function(success, fail) {
-        sql.query("SELECT ba.*, IFNULL(u.Username, 'Unknown User') as 'Username' FROM bountyattempts ba LEFT JOIN users u On ba.UserID = u.ID WHERE BountyID = ? ORDER BY DateAdded DESC", bountyId, function(err, res) {
+        sql.query("SELECT ba.*, IFNULL(u.Username, 'Unknown User') as 'Username', IFNULL(b.Title, 'Unknown Bounty') as 'BountyName' FROM bountyattempts ba LEFT JOIN users u On ba.UserID = u.ID LEFT JOIN bounties b ON ba.BountyID = b.ID WHERE BountyID = ? ORDER BY DateAdded DESC", bountyId, function(err, res) {
             if (err) {
                 console.log(err);
                 fail(err);
@@ -63,7 +64,7 @@ BountyAttempt.getBountyAttemptsByBounty = function(bountyId) {
 
 BountyAttempt.getBountyAttemptsByUser = function(userId) {
     return new Promise(function(success, fail) {
-        sql.query("SELECT * FROM bountyattempts WHERE UserID = ? ORDER BY DateAdded DESC", userId, function(err, res) {
+        sql.query("SELECT ba.*, IFNULL(u.Username, 'Unknown User') as 'Username', IFNULL(b.Title, 'Unknown Bounty') as 'BountyName' FROM bountyattempts ba LEFT JOIN users u On ba.UserID = u.ID LEFT JOIN bounties b ON ba.BountyID = b.ID WHERE UserID = ? ORDER BY DateAdded DESC", userId, function(err, res) {
             if (err) {
                 console.log(err);
                 fail(err);

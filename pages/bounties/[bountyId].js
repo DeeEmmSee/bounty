@@ -37,7 +37,6 @@ class BountyPage extends React.Component {
 
         GetBountyFunc(bountyId)
         .then(function(res) {
-            console.log(res.data);
             bountyPage.setState((state) => { return {bounty: res.data, loaded: true} });
         })
         .catch(function(error) {

@@ -30,12 +30,12 @@ module.exports = function(app, passport) {
         //.post([passport.authenticate('jwt'), bountyController.getBounties]);
         
     app.route('/api/bounties/bountycontribution')
-        .get([passport.authenticate('jwt'), bountyController.getBountyContribution])
+        .get([bountyController.getBountyContribution])
         //.post([passport.authenticate('jwt'), bountyController.createBountyContribution]);
         .post([bountyController.createBountyContribution]);
 
     app.route('/api/bounties/bountyattempt')
-        .get([passport.authenticate('jwt'), bountyController.getBountyAttempts])
+        .get([bountyController.getBountyAttempts])
         .post([bountyController.isValidBountyAttempt, bountyController.createBountyAttempt]);
 
     app.route('/api/users/user')

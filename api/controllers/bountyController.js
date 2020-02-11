@@ -154,8 +154,8 @@ exports.createBountyContribution = function(req, res) {
 
 
 exports.getBountyContribution = function(req, res) {
-    if (req.body.type == "bounty") {
-        BountyContribution.getBountyContributionByBounty(req.body.id)
+    if (req.query.type == "bounty") {
+        BountyContribution.getBountyContributionByBounty(req.query.id)
         .then(function(bountycontribution) {
             res.status(200).send(bountycontribution);
         })
@@ -163,8 +163,8 @@ exports.getBountyContribution = function(req, res) {
             res.status(500).send(err);
         });
     }
-    else if (req.body.type == "user") {
-        BountyContribution.getBountyContributionByUser(req.body.id)
+    else if (req.query.type == "user") {
+        BountyContribution.getBountyContributionByUser(req.query.id)
         .then(function(bountycontribution) {
             res.status(200).send(bountycontribution);
         })
