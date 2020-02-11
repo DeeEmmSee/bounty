@@ -42,7 +42,7 @@ class MyBountiesComp extends React.Component {
     }
 
     render() {
-        const BountyListOpen = this.state.bounties.filter(b => { return b.Status === 1}).sort((a, b) => { return b.CreatedDate > a.CreatedDate ? 1 : -1 }).map((bounty, key) =>
+        const BountyListOpen = this.state.bounties.filter(b => { return b.Status === 1; }).sort((a, b) => { return b.CreatedDate > a.CreatedDate ? 1 : -1; }).map((bounty, key) =>
             <tr style={{cursor: 'pointer'}} key={key} onClick={this.GoToBounty.bind(this, bounty.ID)}>
                 <td>{bounty.Title}</td>
                 <td>${bounty.TotalAmount}</td>
@@ -51,7 +51,7 @@ class MyBountiesComp extends React.Component {
             </tr>
         );
 
-        const BountyListClaimed = this.state.bounties.filter(b => { return b.Status === 2}).sort((a, b) => { return b.ClaimedDate > a.ClaimedDate ? 1 : -1 }).map((bounty, key) =>
+        const BountyListClaimed = this.state.bounties.filter(b => { return b.Status === 2; }).sort((a, b) => { return b.ClaimedDate > a.ClaimedDate ? 1 : -1; }).map((bounty, key) =>
             <tr style={{cursor: 'pointer'}} key={key} onClick={this.GoToBounty.bind(this, bounty.ID)}>
                 <td>{bounty.Title}</td>
                 <td>${bounty.TotalAmount}</td>
@@ -62,7 +62,7 @@ class MyBountiesComp extends React.Component {
             </tr>
         );
 
-        const BountyListClosed = this.state.bounties.filter(b => { return b.Status === 3}).sort((a, b) => { return b.CreatedDate > a.CreatedDate ? 1 : -1 }).map((bounty, key) =>
+        const BountyListClosed = this.state.bounties.filter(b => { return b.Status === 3; }).sort((a, b) => { return b.CreatedDate > a.CreatedDate ? 1 : -1; }).map((bounty, key) =>
             <tr style={{cursor: 'pointer'}} key={key} onClick={this.GoToBounty.bind(this, bounty.ID)}>
                 <td>{bounty.Title}</td>
                 <td>${bounty.TotalAmount}</td>

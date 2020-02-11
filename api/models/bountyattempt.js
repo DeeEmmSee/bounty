@@ -95,4 +95,61 @@ BountyAttempt.createBountyAttempt = function(bountyAttempt) {
     });
 };
 
+BountyAttempt.updateBountyAttempt = function(ID, status) {
+    return new Promise(function(success, fail) {
+        sql.query("UPDATE bountyattempts SET StatusID = ? WHERE ID = ?", [status, ID], function(err, res) {
+            if (err) {
+                console.log(err);
+                fail(err);
+            }
+            else {
+                success(res.insertId.toString());
+            }
+        })
+    });
+};
+
+BountyAttempt.setBountyAttemptsToRejected = function(ID, bountyID) {
+    return new Promise(function(success, fail) {
+        sql.query("UPDATE bountyattempts SET StatusID = -1 WHERE BountyID = ? AND ID != ?", [bountyID, ID], function(err, res) {
+            if (err) {
+                console.log(err);
+                fail(err);
+            }
+            else {
+                success(res.insertId.toString());
+            }
+        })
+    });
+};
+
+
+BountyAttempt.getPendingAttemptsCount = function(userID) {
+    return new Promise(function(success, fail) {
+        sql.query("SELECT COUNT(1) as 'Total' FROM bountyattempts ba LEFT JOIN bounties b ON b.ID = ba.BountyID WHERE b.CreatedBy = ? AND b.Status = 1 AND ba.StatusID = 0", userID, function(err, res) {
+            if (err) {
+                console.log(err);
+                fail(err);
+            }
+            else {
+                success(res[0].Total);
+            }
+        })
+    });
+}
+
+BountyAttempt.getMyAttemptsCount = function(userID) {
+    return new Promise(function(success, fail) {
+        sql.query("SELECT COUNT(1) as 'Total' FROM bountyattempts WHERE UserID = ? AND StatusID = 0", userID, function(err, res) {
+            if (err) {
+                console.log(err);
+                fail(err);
+            }
+            else {
+                success(res[0].Total);
+            }
+        })
+    });
+}
+
 module.exports = BountyAttempt;

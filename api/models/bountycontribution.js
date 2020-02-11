@@ -98,4 +98,18 @@ BountyContribution.setBountyContributionAsPaid = function(contribID) {
     });
 };
 
+BountyContribution.getMyContributionsCount = function(userID) {
+    return new Promise(function(success, fail) {
+        sql.query("SELECT COUNT(1) as 'Total' FROM bountycontributions bc LEFT JOIN bounties b ON b.ID = bc.BountyID WHERE bc.UserID = ? AND Paid = FALSE AND b.Status = 2", userID, function(err, res) {
+            if (err) {
+                console.log(err);
+                fail(err);
+            }
+            else {
+                success(res[0].Total);
+            }
+        })
+    });
+}
+
 module.exports = BountyContribution;

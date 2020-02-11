@@ -98,7 +98,13 @@ export async function SetBountyContributionAsPaid(ID, bountyID){
     return axios.patch(config.api_url + '/api/bounties/bountycontribution',  {'id': ID, 'bountyID': bountyID});
 }
 
+export async function UpdateBountyAttempt(ID, statusID, bountyID){
+    return axios.patch(config.api_url + '/api/bounties/bountyattempt',  {'id': ID, 'statusID': statusID, 'bountyID': bountyID});
+}
 
+export async function GetProfileStats(userID) {
+    return axios.get(config.api_url + '/api/bounties/profilestats',  {params: {'id': userID}});
+}
 // export default function APIFunctions() {
     
 // }

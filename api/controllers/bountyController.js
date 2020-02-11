@@ -238,24 +238,64 @@ exports.getBountyAttempts = function(req, res) {
     }
 };
 
-exports.setBountyContributionAsPaid = function(req, res) {
+exports.setBountyContributionAsPaid = function(req, res, next) {
     BountyContribution.setBountyContributionAsPaid(req.body.id)
     .then(function(msg) {
-        // Check bounty has no more outstanding contributions
-        Bounty.getBounty(req.body.bountyId)
-        .then(function(bounty) {
-            if (bounty.Contributors.filter(c => { return !c.Paid}).length === 0) {
-                console.log("No more to pay");
-                Bounty.updateBountyStatus(3, bounty.ID);
-            }
-            
-            res.status(200).send("Success");
-        })
-        .catch(function(err) {
-            res.status(500).send(err);
-        });        
+        next();
     })
     .catch(function(err) {
         res.status(500).send(err);
     });
 };
+
+exports.checkBountyStatusAfterContribUpdate = function(req, res) {
+    // Check bounty has no more outstanding contributions
+    Bounty.getBounty(req.body.bountyId)
+    .then(function(bounty) {
+        if (bounty.Contributors.filter(c => { return !c.Paid}).length === 0) {
+            console.log("No more to pay");
+            Bounty.updateBountyStatus(3, bounty.ID);
+        }
+        
+        res.status(204).send("Success");
+    })
+    .catch(function(err) {
+        res.status(500).send(err);
+    });       
+}
+
+exports.updateBountyAttempt = function(req, res, next) {
+    BountyAttempt.updateBountyAttempt(req.body.statusID, req.body.id)
+    .then(function(msg) {
+        next()
+    })
+    .catch(function(err) {
+        res.status(500).send(err);
+    });
+}
+
+exports.checkBountyStatusAfterAttemptUpdate = function(req, res) {
+    if (req.body.statusID === 1) {
+        // Update all other bounty attempts to rejected
+        BountyAttempt.setBountyAttemptsToRejected(req.body.id, req.body.bountyID)
+        .then(function(attempts) {
+            res.status(204).send("Success!");
+        })
+        .catch(function(err) {
+            res.status(500).send(err);
+        });
+    }
+    else {
+        res.status(204);
+    }
+}
+
+exports.getProfileStats = function(req, res) {
+    Bounty.getProfileStats(req.query.id)
+    .then(function(stats) {
+        res.status(200).send(stats);
+    })
+    .catch(function(err) {
+        res.status(500).send(err);
+    });   
+}

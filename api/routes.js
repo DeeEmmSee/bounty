@@ -33,11 +33,12 @@ module.exports = function(app, passport) {
         .get([bountyController.getBountyContribution])
         //.post([passport.authenticate('jwt'), bountyController.createBountyContribution]);
         .post([bountyController.createBountyContribution])
-        .patch([bountyController.setBountyContributionAsPaid]);
+        .patch([bountyController.setBountyContributionAsPaid, bountyController.checkBountyStatusAfterContribUpdate]);
 
     app.route('/api/bounties/bountyattempt')
         .get([bountyController.getBountyAttempts])
-        .post([bountyController.isValidBountyAttempt, bountyController.createBountyAttempt]);
+        .post([bountyController.isValidBountyAttempt, bountyController.createBountyAttempt])
+        .patch([bountyController.updateBountyAttempt, bountyController.checkBountyStatusAfterAttemptUpdate]);
 
     app.route('/api/users/user')
         //.get([passport.authenticate('jwt'), userController.getUser])
@@ -45,6 +46,9 @@ module.exports = function(app, passport) {
         .post([userController.createUser])//.post([passport.authenticate('jwt'), userController.createUser])
         .patch([passport.authenticate('jwt'), userController.updateUser]);
         //.put([passport.authenticate('jwt'), userController.updateUser]);
+
+    app.route('/api/bounties/profilestats')
+        .get([bountyController.getProfileStats])
 
     // app.route('/api/bounties/bounty')
     //     .get([authController.validJWTNeeded, bountyController.getBounty])

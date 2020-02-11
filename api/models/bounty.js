@@ -1,8 +1,8 @@
 // MySQL
 const sql = require('../models/sql.js');
 var BountyContribution = require('../models/BountyContribution.js');
-var Game = require('../models/Game.js');
 var BountyAttempt = require('../models/bountyattempt.js');
+var Game = require('../models/Game.js');
 
 const fields = "b.`ID`, b.`GameID`, b.`Title`, b.`BountyCondition`, b.`Description`, b.`Image`, b.`Status`, b.`AllowContributors`, b.`Featured`, b.`CreatedBy`, b.`CreatedDate`, b.`ClaimedBy`, b.`ClaimedDate`, b.`UpdatedDateTime`, `b`.`MaxAttempts`";
 
@@ -116,7 +116,6 @@ Bounty.getBounties = function(where, order, orderDesc, limit) {
         if (order != "" && order != null){ query += " ORDER BY " + order; query += orderDesc ? " DESC" : ""; }
         if (limit != "" && limit != null){ query += " LIMIT " + limit; }
 
-        console.log(query);
         sql.query(query, function(err, res) {
             if (err) {
                 console.log(err);
@@ -276,6 +275,69 @@ Bounty.updateBountyStatus = function(statusID, bountyID) {
                 success(res.insertId.toString());
             }
         })
+    });
+}
+
+Bounty.getUserBountyCount = function(userID) {
+    return new Promise(function(success, fail) {
+        sql.query("SELECT COUNT(1) as 'Total' FROM bounties WHERE CreatedBy = ? AND (Status = 1 OR Status = 2)", userID, function(err, res) {
+            if (err) {
+                console.log(err);
+                fail(err);
+            }
+            else {
+                success(res[0].Total);
+            }
+        })
+    });
+}
+
+Bounty.getProfileStats = function(userID) {
+    return new Promise(function(success, fail) {
+        var promises = [];
+        
+        let pendingAttemptsPromise = BountyAttempt.getPendingAttemptsCount(userID);
+        promises.push(pendingAttemptsPromise);
+
+        let myBountiesPromise = Bounty.getUserBountyCount(userID);
+        promises.push(myBountiesPromise);
+
+        let myAttemptsPromise = BountyAttempt.getMyAttemptsCount(userID);
+        promises.push(myAttemptsPromise);
+
+        let myContributionsPromise = BountyContribution.getMyContributionsCount(userID);
+        promises.push(myContributionsPromise);
+
+        Promise.all(promises)
+        .then(function(vals) {
+            let stats = {
+                pendingAttempts: 0,
+                myBounties: 0,
+                myAttempts: 0,
+                myContributions: 0,
+            };
+
+            for (var i = 0; i < vals.length; i++){
+                if (i == 0) { 
+                    stats.pendingAttempts = vals[i];
+                }
+                else if (i == 1) {
+                    stats.myBounties = vals[i];
+                }
+                else if (i == 2) {
+                    stats.myAttempts = vals[i];
+                }
+                else if (i == 3) {
+                    stats.myContributions = vals[i];
+                }
+            }
+
+            success(stats);
+        })
+        .catch(function(err){
+            console.log(err);
+            fail(err);
+        });
     });
 }
 
