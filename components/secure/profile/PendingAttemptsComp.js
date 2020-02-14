@@ -90,14 +90,6 @@ class PendingAttemptsComp extends React.Component {
             <option key={key} value={bounty.ID}>{bounty.Title} ({bounty.Attempts.filter(ba => { return ba.StatusID === 0; }).length})</option>
         );
 
-        const BountyAttempts = this.state.selectedBounty.Attempts.filter(ba => { return ba.StatusID === 0; }).sort((a, b) => { return a.DateAdded > b.DateAdded ? 1 : -1; }).map((ba, key) => 
-            <li key={key}>
-                {ba.Username}
-                {ba.Proof}
-                {ToReadableDateString(ba.DateAdded)}
-            </li>
-        );
-
         const LatestBountyAttempt = this.state.selectedBounty.Attempts.filter(ba => { return ba.StatusID === 0; }).sort((a, b) => { return a.DateAdded > b.DateAdded ? 1 : -1; }).map((ba, key) => 
         <div key={key} className="row">
             {key === 0 &&
@@ -116,7 +108,7 @@ class PendingAttemptsComp extends React.Component {
         return(
             <div>
                 <div className="form-group">
-                    {this.state.selectedBounty.Attempts.filter(ba => { return ba.StatusID === 0; }).length > 0 ?
+                    {this.state.bounties.filter(b => { return b.Status === 1 && b.Attempts.filter(ba => { return ba.StatusID === 0; }).length; }).length > 0 ?
                     <select className="form-control" onChange={this.SelectedBounty.bind(this)}>
                         <option>-- Please select --</option>
                         {BountyOptions}

@@ -103,7 +103,7 @@ BountyAttempt.updateBountyAttempt = function(ID, status) {
                 fail(err);
             }
             else {
-                success(res.insertId.toString());
+                success(res.affectedRows);
             }
         })
     });
@@ -117,7 +117,7 @@ BountyAttempt.setBountyAttemptsToRejected = function(ID, bountyID) {
                 fail(err);
             }
             else {
-                success(res.insertId.toString());
+                success(res.affectedRows);
             }
         })
     });

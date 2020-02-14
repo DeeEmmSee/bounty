@@ -68,9 +68,9 @@ class ProfileComp extends React.Component {
                     <div className="col-sm-9">
                         { this.state.activeSection === "profile" && <ProfileOverviewComp /> }
                         { this.state.activeSection === "pendingattempts" && <PendingAttemptsComp UpdateProfileStats={this.PopulateStats} /> }
-                        { this.state.activeSection === "mybounties" && <MyBountiesComp /> }
+                        { this.state.activeSection === "mybounties" && <MyBountiesComp UpdateProfileStats={this.PopulateStats} /> }
                         { this.state.activeSection === "myattempts" && <MyAttemptsComp /> }
-                        { this.state.activeSection === "mycontributions" && <MyContributionsComp /> }
+                        { this.state.activeSection === "mycontributions" && <MyContributionsComp UpdateProfileStats={this.PopulateStats} /> }
                         { this.state.activeSection === "preferences" && <PreferencesComp /> }
                     </div>
                 </div>

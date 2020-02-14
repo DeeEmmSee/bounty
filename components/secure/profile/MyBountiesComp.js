@@ -30,6 +30,9 @@ class MyBountiesComp extends React.Component {
         GetBounties(obj)
         .then(res => {
             state.setState({loaded: true, bounties: res.data});
+
+            // Update ProfileComp stats
+            this.props.UpdateProfileStats();
         })
         .catch(err =>{
             console.log(err);

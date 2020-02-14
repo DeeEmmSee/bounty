@@ -111,7 +111,7 @@ class Bounty {
 
 Bounty.getBounties = function(where, order, orderDesc, limit) {
     return new Promise(function(success, fail) {
-        var query = "SELECT " + fields + ", IFNULL(u.`Username`, 'N/A') as 'CreatedByUsername', IFNULL(u2.`Username`, 'N/A') as 'ClaimedByUsername', IFNULL(SUM(bc.`Amount`), 0) as 'TotalAmount' FROM bounties b LEFT JOIN users u ON b.CreatedBy = u.ID LEFT JOIN users u2 ON b.ClaimedBy = u.ID LEFT JOIN bountycontributions bc ON b.ID = bc.BountyID";
+        var query = "SELECT " + fields + ", IFNULL(u.`Username`, 'N/A') as 'CreatedByUsername', IFNULL(u2.`Username`, 'N/A') as 'ClaimedByUsername', IFNULL(SUM(bc.`Amount`), 0) as 'TotalAmount' FROM bounties b LEFT JOIN users u ON b.CreatedBy = u.ID LEFT JOIN users u2 ON b.ClaimedBy = u2.ID LEFT JOIN bountycontributions bc ON b.ID = bc.BountyID";
 
         if (where != "" && where != null){ query += " WHERE " + where; }
 
@@ -185,7 +185,7 @@ Bounty.getBounties = function(where, order, orderDesc, limit) {
 
 Bounty.getBounty = function(bountyId) {
     return new Promise(function(success, fail) {
-        sql.query("SELECT " + fields + ", IFNULL(u.Username, 'N/A') as 'CreatedByUsername', IFNULL(u2.Username, 'N/A') as 'ClaimedByUsername' FROM bounties b LEFT JOIN users u ON b.CreatedBy = u.ID LEFT JOIN users u2 ON b.ClaimedBy = u.ID WHERE b.ID = ?", bountyId, function(err, res) {
+        sql.query("SELECT " + fields + ", IFNULL(u.Username, 'N/A') as 'CreatedByUsername', IFNULL(u2.Username, 'N/A') as 'ClaimedByUsername' FROM bounties b LEFT JOIN users u ON b.CreatedBy = u.ID LEFT JOIN users u2 ON b.ClaimedBy = u2.ID WHERE b.ID = ?", bountyId, function(err, res) {
             if (err) {
                 console.log(err);
                 fail(err);
@@ -262,7 +262,21 @@ Bounty.updateBounty = function(bounty) {
                 fail(err);
             }
             else {
-                success(res.insertId.toString());
+                success(res.affectedRows);
+            }
+        })
+    });
+}
+
+Bounty.setBountyClaimed = function(bountyID) {
+    return new Promise(function(success, fail) {
+        sql.query("UPDATE bounties b INNER JOIN bountyattempts ba ON b.ID = ba.BountyID AND ba.StatusID = 1 SET Status = 2, ClaimedBy = ba.UserID, ClaimedDate = CURRENT_TIMESTAMP WHERE b.ID = ?", [bountyID], function(err, res) {
+            if (err) {
+                console.log(err);
+                fail(err);
+            }
+            else {
+                success(res.affectedRows);
             }
         })
     });
@@ -270,13 +284,13 @@ Bounty.updateBounty = function(bounty) {
 
 Bounty.updateBountyStatus = function(statusID, bountyID) {
     return new Promise(function(success, fail) {
-        sql.query("UPDATE bounties SET StatusID = ? WHERE ID = ?", [statusID, bountyID], function(err, res) {
+        sql.query("UPDATE bounties SET Status = ? WHERE ID = ?", [statusID, bountyID], function(err, res) {
             if (err) {
                 console.log(err);
                 fail(err);
             }
             else {
-                success(res.insertId.toString());
+                success(res.affectedRows);
             }
         })
     });

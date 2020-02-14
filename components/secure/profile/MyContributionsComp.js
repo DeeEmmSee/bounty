@@ -25,6 +25,9 @@ class MyContributionsComp extends React.Component {
         GetBountyContributionsByUser(this.state.currentUserId)
         .then(res => {
             state.setState({loaded: true, contributions: res.data});
+
+             // Update ProfileComp stats
+            this.props.UpdateProfileStats();
         })
         .catch(err =>{
             console.log(err);

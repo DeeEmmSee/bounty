@@ -54,7 +54,7 @@ BountyContribution.getBountyContributionByBounty = function(bountyId) {
 
 BountyContribution.getBountyContributionByUser = function(userId) {
     return new Promise(function(success, fail) {
-        sql.query("SELECT " + fields + ", IFNULL(u.Username, 'Unknown User') as 'Username', IFNULL(b.Title, 'Unknown Bounty') as 'BountyName', b.Status as 'BountyStatus', IFNULL(u2.Username, 'N/A') as 'BountyClaimedBy' FROM bountycontributions bc LEFT JOIN users u On bc.UserID = u.ID LEFT JOIN bounties b ON bc.BountyID = b.ID LEFT JOIN users u2 On b.ClaimedBy = u.ID WHERE UserID = ? ORDER BY DateAdded DESC", userId, function(err, res) {
+        sql.query("SELECT " + fields + ", IFNULL(u.Username, 'Unknown User') as 'Username', IFNULL(b.Title, 'Unknown Bounty') as 'BountyName', b.Status as 'BountyStatus', IFNULL(u2.Username, 'N/A') as 'BountyClaimedBy' FROM bountycontributions bc LEFT JOIN users u On bc.UserID = u.ID LEFT JOIN bounties b ON bc.BountyID = b.ID LEFT JOIN users u2 On b.ClaimedBy = u2.ID WHERE UserID = ? ORDER BY DateAdded DESC", userId, function(err, res) {
             if (err) {
                 console.log(err);
                 fail(err);
