@@ -183,7 +183,7 @@ class BountyPage extends React.Component {
 
                         <h4>Attempts</h4>
                         {
-                            this.state.bounty.Status == 1 && this.state.bounty.CreatedBy !== this.state.currentUserId && this.state.bounty.Attempts.filter(AttemptCheck, this.state.currentUserId).length < this.state.bounty.MaxAttempts && <a href="#" data-toggle="modal" data-target="#newAttemptModal">Click here to submit an attempt</a>
+                            this.state.bounty.Status == 1 && this.state.bounty.CreatedBy !== this.state.currentUserId && (this.state.bounty.MaxAttempts === 0 || this.state.bounty.Attempts.filter(AttemptCheck, this.state.currentUserId).length < this.state.bounty.MaxAttempts) && <a href="#" data-toggle="modal" data-target="#newAttemptModal">Click here to submit an attempt</a>
                         }
                         
                         { this.state.bounty.Attempts.length > 0 ?
@@ -238,7 +238,7 @@ class BountyPage extends React.Component {
                        
                         <h4>Contributors</h4>
                         { 
-                            this.state.bounty.AllowContributors && this.state.bounty.Contributors.filter(ContribCheck, this.state.currentUserId).length === 0 && <a href="#" data-toggle="modal" data-target="#newContributorModal">Click here to add a contribution</a>
+                            this.state.bounty.Status == 1 && this.state.bounty.AllowContributors && this.state.bounty.Contributors.filter(ContribCheck, this.state.currentUserId).length === 0 && <a href="#" data-toggle="modal" data-target="#newContributorModal">Click here to add a contribution</a>
                         }
 
                         <div className="modal fade" id="newContributorModal" tabIndex="-1" role="dialog" aria-labelledby="newContributorModalLabel" aria-hidden="true">
@@ -293,6 +293,9 @@ class BountyPage extends React.Component {
                             No contributors for this bounty
                         </div>
                         }
+
+                        <br />
+                        <br />
 
                         { this.state.bounty.Status == 2 && <ClaimedPanel /> }
                     </div>

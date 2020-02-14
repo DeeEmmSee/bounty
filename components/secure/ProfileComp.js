@@ -19,25 +19,27 @@ class ProfileComp extends React.Component {
             myAttempts: 0,
             myContributions: 0,
             currentUserId: cookieData.userId,
+            testShow: false
         };
 
         //if (props.section !== undefined && props.section !== 'undefined') {
         //    this.state.activeSection = props.section;
         //}
 
+        this.PopulateStats = this.PopulateStats.bind(this);
+
         this.PopulateStats();
     }
     
     PopulateStats() {
-        let state = this;
-
         GetProfileStats(this.state.currentUserId)
         .then(res => {
-            state.setState({pendingAttempts: res.data.pendingAttempts, myBounties: res.data.myBounties, myAttempts: res.data.myAttempts, myContributions: res.data.myContributions});
+            this.setState({pendingAttempts: res.data.pendingAttempts, myBounties: res.data.myBounties, myAttempts: res.data.myAttempts, myContributions: res.data.myContributions});
         })
         .catch(err => {
             console.log(err);
         });
+
         // pendingAttempts - where Status = 0
         // myBounties - where StatusID = 1 OR 2
         // myAttempts - where Status = 0
@@ -65,7 +67,7 @@ class ProfileComp extends React.Component {
                     </div>
                     <div className="col-sm-9">
                         { this.state.activeSection === "profile" && <ProfileOverviewComp /> }
-                        { this.state.activeSection === "pendingattempts" && <PendingAttemptsComp /> }
+                        { this.state.activeSection === "pendingattempts" && <PendingAttemptsComp UpdateProfileStats={this.PopulateStats} /> }
                         { this.state.activeSection === "mybounties" && <MyBountiesComp /> }
                         { this.state.activeSection === "myattempts" && <MyAttemptsComp /> }
                         { this.state.activeSection === "mycontributions" && <MyContributionsComp /> }
