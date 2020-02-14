@@ -35,7 +35,7 @@ class PendingAttemptsComp extends React.Component {
         .then(res => {
             state.setState({loaded: true, bounties: res.data});
 
-            if (selectedBountyID !== undefined) {
+            if (selectedBountyID !== undefined && selectedBountyID !== 'undefined') {
                 state.SetSelectedBounty(selectedBountyID);
             }
 

@@ -183,7 +183,35 @@ class BountyPage extends React.Component {
 
                         <h4>Attempts</h4>
                         {
-                            this.state.bounty.Status == 1 && this.state.bounty.CreatedBy !== this.state.currentUserId && (this.state.bounty.MaxAttempts === 0 || this.state.bounty.Attempts.filter(AttemptCheck, this.state.currentUserId).length < this.state.bounty.MaxAttempts) && <a href="#" data-toggle="modal" data-target="#newAttemptModal">Click here to submit an attempt</a>
+                            this.state.bounty.Status == 1 && this.state.bounty.CreatedBy !== this.state.currentUserId && (this.state.bounty.MaxAttempts === 0 || this.state.bounty.Attempts.filter(AttemptCheck, this.state.currentUserId).length < this.state.bounty.MaxAttempts) && 
+                            <div>
+                                <a href="#" data-toggle="modal" data-target="#newAttemptModal">Click here to submit an attempt</a>
+
+                                <div className="modal fade" id="newAttemptModal" tabIndex="-1" role="dialog" aria-labelledby="newAttemptModalLabel" aria-hidden="true">
+                                    <div className="modal-dialog" role="document">
+                                        <div className="modal-content">
+                                            <div className="modal-header">
+                                                <h5 className="modal-title" id="newAttemptModalLabel">Modal title</h5>
+                                                <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div className="modal-body">
+                                                <div className="row">
+                                                    <div className="col-sm-12">
+                                                        <label>Link to proof (Must be a valid Youtube/Twitch URL)</label><br />
+                                                        <input type="text" name="txtAttemptProof" value={this.state.txtAttemptProof} className="form-control" placeholder="" onChange={this.HandleInputChange.bind(this)}/>
+                                                        <span style={{"color": "red"}}>{this.state.errorMsgSubmitAttempt}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div className="modal-footer">
+                                                <button onClick={this.SaveNewAttempt.bind(this)} className="btn btn-primary">Submit</button><br />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         }
                         
                         { this.state.bounty.Attempts.length > 0 ?
@@ -207,30 +235,7 @@ class BountyPage extends React.Component {
                         </div>
                         }
 
-                        <div className="modal fade" id="newAttemptModal" tabIndex="-1" role="dialog" aria-labelledby="newAttemptModalLabel" aria-hidden="true">
-                            <div className="modal-dialog" role="document">
-                                <div className="modal-content">
-                                    <div className="modal-header">
-                                        <h5 className="modal-title" id="newAttemptModalLabel">Modal title</h5>
-                                        <button type="button" className="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>
-                                    <div className="modal-body">
-                                        <div className="row">
-                                            <div className="col-sm-12">
-                                                <label>Link to proof (Must be a valid Youtube/Twitch URL)</label><br />
-                                                <input type="text" name="txtAttemptProof" value={this.state.txtAttemptProof} className="form-control" placeholder="" onChange={this.HandleInputChange.bind(this)}/>
-                                                <span style={{"color": "red"}}>{this.state.errorMsgSubmitAttempt}</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className="modal-footer">
-                                        <button onClick={this.SaveNewAttempt.bind(this)} className="btn btn-primary">Submit</button><br />
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                       
 
                         <br />
                         <br />
@@ -238,41 +243,47 @@ class BountyPage extends React.Component {
                        
                         <h4>Contributors</h4>
                         { 
-                            this.state.bounty.Status == 1 && this.state.bounty.AllowContributors && this.state.bounty.Contributors.filter(ContribCheck, this.state.currentUserId).length === 0 && <a href="#" data-toggle="modal" data-target="#newContributorModal">Click here to add a contribution</a>
-                        }
+                            this.state.bounty.Status == 1 && this.state.bounty.AllowContributors && this.state.bounty.Contributors.filter(ContribCheck, this.state.currentUserId).length === 0 && 
+                            <div>
+                                <a href="#" data-toggle="modal" data-target="#newContributorModal">Click here to add a contribution</a>
 
-                        <div className="modal fade" id="newContributorModal" tabIndex="-1" role="dialog" aria-labelledby="newContributorModalLabel" aria-hidden="true">
-                            <div className="modal-dialog" role="document">
-                                <div className="modal-content">
-                                    <div className="modal-header">
-                                        <h5 className="modal-title" id="newContributorModalLabel">Modal title</h5>
-                                        <button type="button" className="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>
-                                    <div className="modal-body">
-                                        <div className="form-group">
-                                            <label htmlFor="txtContributionAmount" className="control-label">Amount to Contribute ($) *</label>
-                                            <div className="input-group mb-3">
-                                                <div className="input-group-prepend">
-                                                    <span className="input-group-text" id="basic-addon1">$</span>
-                                                </div>
-                                                <input type="text" name="txtContributionAmount" value={this.state.txtContributionAmount} className="form-control" placeholder="0" onChange={this.HandleInputChange.bind(this)}/>
-                                                <span style={{"color": "red"}}>{this.state.errorMsgContribution}</span>
+                                <div className="modal fade" id="newContributorModal" tabIndex="-1" role="dialog" aria-labelledby="newContributorModalLabel" aria-hidden="true">
+                                    <div className="modal-dialog" role="document">
+                                        <div className="modal-content">
+                                            <div className="modal-header">
+                                                <h5 className="modal-title" id="newContributorModalLabel">Modal title</h5>
+                                                <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
                                             </div>
-                                            <p>
-                                                By clicking this button you agree to pay the user that successfully claimed this bounty the amount entered in the box above. It is your responsibility to ensure that all payments are made in good time after the bounty has been claimed. 
-                                                You will be notified once the bounty has been claimed in order for you to make your payment swiftly.
-                                            </p>
-                                            
-                                        </div> 
-                                    </div>
-                                    <div className="modal-footer">
-                                        <button onClick={this.SaveNewContribution.bind(this)} className="btn btn-primary">Add Contribution</button>
+                                            <div className="modal-body">
+                                                <div className="form-group">
+                                                    <label htmlFor="txtContributionAmount" className="control-label">Amount to Contribute ($) *</label>
+                                                    <div className="input-group mb-3">
+                                                        <div className="input-group-prepend">
+                                                            <span className="input-group-text" id="basic-addon1">$</span>
+                                                        </div>
+                                                        <input type="text" name="txtContributionAmount" value={this.state.txtContributionAmount} className="form-control" placeholder="0" onChange={this.HandleInputChange.bind(this)}/>
+                                                        <span style={{"color": "red"}}>{this.state.errorMsgContribution}</span>
+                                                    </div>
+                                                    <p>
+                                                        By clicking this button you agree to pay the user that successfully claimed this bounty the amount entered in the box above. It is your responsibility to ensure that all payments are made in good time after the bounty has been claimed. 
+                                                        You will be notified once the bounty has been claimed in order for you to make your payment swiftly.
+                                                    </p>
+                                                    
+                                                </div> 
+                                            </div>
+                                            <div className="modal-footer">
+                                                <button onClick={this.SaveNewContribution.bind(this)} className="btn btn-primary">Add Contribution</button>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
+
+                        }
+
+                       
 
                         { this.state.bounty.Contributors.length > 0 ?
                         <div>

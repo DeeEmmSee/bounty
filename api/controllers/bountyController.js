@@ -253,7 +253,7 @@ exports.checkBountyStatusAfterContribUpdate = function(req, res) {
     Bounty.getBounty(req.body.bountyID)
     .then(function(bounty) {
         if (bounty.Contributors.filter(c => { return !c.Paid}).length === 0) {
-            console.log("No more to pay");
+            //console.log("No more to pay");
             Bounty.updateBountyStatus(3, bounty.ID);
         }
         
@@ -265,7 +265,7 @@ exports.checkBountyStatusAfterContribUpdate = function(req, res) {
 }
 
 exports.updateBountyAttempt = function(req, res, next) {
-    BountyAttempt.updateBountyAttempt(req.body.statusID, req.body.id)
+    BountyAttempt.updateBountyAttempt(req.body.id, req.body.statusID)
     .then(function(msg) {
         next()
     })
@@ -294,7 +294,7 @@ exports.checkBountyStatusAfterAttemptUpdate = function(req, res) {
         });
     }
     else {
-        res.status(204);
+        res.status(204).send("Complete");
     }
 }
 
