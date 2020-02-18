@@ -1,8 +1,7 @@
-import { GetFeatured as FeaturedFunc} from '../library/APIFunctions';
-
 class Carousel extends React.Component {
     constructor(props){
         super(props);
+
         this.state = {
             items: [],
             loaded: false
@@ -13,8 +12,8 @@ class Carousel extends React.Component {
     GetBounties(){
         this.state.loaded = false;
         let ra = this;
-
-        FeaturedFunc()
+        
+        this.props.api.GetFeatured()
         .then(res => {
             ra.setState((state) => { return {items: res.data, loaded: true} });
         })

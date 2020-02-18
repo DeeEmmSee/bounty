@@ -1,10 +1,12 @@
 import Layout from '../components/Layout';
-import { RegisterUser } from '../library/APIFunctions';
 import RegSubmitSuccess from '../components/RegSubmitSuccess';
+import { GetAPIFunctions } from '../library/common';
 
 class Register extends React.Component {
     constructor(props){
         super(props);
+
+        let api = GetAPIFunctions();
 
         this.state = {
             errorMsg: "",
@@ -15,7 +17,8 @@ class Register extends React.Component {
             txtUsername: "",
             txtPassword: "",
             txtConfirmPassword: "",
-            txtEmail: ""
+            txtEmail: "",
+            api: api
         };
 
         this.HandleInputChange = this.HandleInputChange.bind(this);
@@ -47,7 +50,7 @@ class Register extends React.Component {
             obj.Email = this.state.txtEmail;
             obj.DateRegistered = new Date();
 
-            RegisterUser(obj)
+            this.state.api.Register(obj)
             .then(function(response) {
                 reg.setState((state) => { return {
                     registerForm: false, 

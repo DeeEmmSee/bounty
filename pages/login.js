@@ -1,14 +1,15 @@
 import Layout from '../components/Layout';
-import Cookies from 'universal-cookie';
-import { Login as LoginFunc } from '../library/APIFunctions';
-import { SaveCookie as SaveCookieFunc, IsLoggedIn } from '../library/common';
+import { SaveCookie, IsLoggedIn, GetAPIFunctions } from '../library/common';
 
 class Login extends React.Component {
     constructor(props){
         super(props);
+
+        let api = GetAPIFunctions();
         this.state = {
             txtEmail: "",
             txtPassword: "",
+            api: api
         };
 
         this.HandleInputChange = this.HandleInputChange.bind(this);
@@ -25,10 +26,10 @@ class Login extends React.Component {
         obj.email = this.state.txtEmail;
         obj.password = this.state.txtPassword;
 
-        LoginFunc(obj)
+        this.state.api.Login(obj)
         .then(function(response) {
             // Cookie
-            SaveCookieFunc(response.data.accessToken, response.data.userId);
+            SaveCookie(response.data.accessToken, response.data.userId);
 
             // redirect
             window.location.href = "/";

@@ -1,6 +1,5 @@
 //import React from 'react';
 import Link from 'next/link';
-import { GetRecentlyAdded as RecentlyAddedFunc } from '../library/APIFunctions';
 import {ToReadableDateString} from '../library/common';
 
 class RecentlyAdded extends React.Component {
@@ -17,7 +16,7 @@ class RecentlyAdded extends React.Component {
         this.state.loaded = false;
         let ra = this;
 
-        RecentlyAddedFunc()
+        this.props.api.GetRecentlyAdded()
         .then(res => {
             ra.setState((state) => { return {items: res.data, loaded: true} });
         })

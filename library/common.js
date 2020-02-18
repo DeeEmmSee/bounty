@@ -1,5 +1,6 @@
 import Cookies from 'universal-cookie';
 import config from './config';
+import APIFunctions from './APIFunctions';
 
 export function IsLoggedIn() {
     let cookieData = GetCookieData();
@@ -73,4 +74,9 @@ export function GetAttemptStatus(statusID){
     else {
         return "";
     }
+}
+
+export function GetAPIFunctions(){
+    let cookieData = GetCookieData();
+    return new APIFunctions(cookieData.token);
 }

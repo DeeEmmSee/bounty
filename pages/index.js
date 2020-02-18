@@ -1,11 +1,12 @@
 import dynamic from 'next/dynamic';
 import Layout from '../components/Layout';
-import Carousel from '../components/Carousel';
+import {GetAPIFunctions} from '../library/common';
 //import { render } from 'react-dom';
 
 //import RecentlyAdded from '../components/RecentlyAdded';
 const RecentlyAdded = dynamic(() => import('../components/RecentlyAdded'));
 const RecentlyClaimed = dynamic(() => import('../components/RecentlyClaimed'));
+const Carousel = dynamic(() => import('../components/Carousel'));
 
 //import axios from 'axios';
 //import useSWR from 'swr';
@@ -13,13 +14,20 @@ const RecentlyClaimed = dynamic(() => import('../components/RecentlyClaimed'));
 class Index extends React.Component {
     constructor(props){
         super(props);
+        
+        let api = GetAPIFunctions();
+        this.state = {
+            api: api
+        };
     }
+
     //const { query } = useRouter();
     //let res = GetBounty("Guillermo Rauch");
     //let data = res.data;
 
     //const { data, error } = useSWR(`/api/bounties/bounty`, fetcher);
     //const { data, error } = useSWR(`/api/bounties/bounty${query.author ? '?author=' + query.author : ''}`, fetcher);
+
     render() {
         return(
             <Layout>
@@ -29,7 +37,7 @@ class Index extends React.Component {
                     </div>
                 </div>
 
-                <Carousel />
+                <Carousel api={this.state.api} />
 
                 <div className="row">
                     <div className="col-sm-12">
@@ -50,11 +58,11 @@ class Index extends React.Component {
                 <div className="row">
                     <div className="col-sm-6">
                         <h4>Recently Added</h4>
-                        <RecentlyAdded />
+                        <RecentlyAdded api={this.state.api} />
                     </div>
                     <div className="col-sm-6">
                         <h4>Recently Claimed</h4>
-                        <RecentlyClaimed /> 
+                        <RecentlyClaimed api={this.state.api} /> 
                     </div>
                 </div>
                 

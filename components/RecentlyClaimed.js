@@ -17,7 +17,7 @@ class RecentlyClaimed extends React.Component {
         this.state.loaded = false;        
         let ra = this;
 
-        RecentlyClaimedFunc()
+        this.props.api.GetRecentlyClaimed()
         .then(res => {
             ra.setState((state) => { return {items: res.data, loaded: true} });
         })
