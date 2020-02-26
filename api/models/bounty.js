@@ -1,6 +1,6 @@
 // MySQL
 const sql = require('../models/sql.js');
-var BountyContribution = require('../models/BountyContribution.js');
+var BountyContribution = require('../models/bountycontribution.js');
 var BountyAttempt = require('../models/bountyattempt.js');
 var Game = require('../models/Game.js');
 

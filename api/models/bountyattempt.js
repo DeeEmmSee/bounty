@@ -1,6 +1,6 @@
 // MySQL
 const sql = require('../models/sql.js');
-var Bounty = require('../models/Bounty.js');
+var Bounty = require('../models/bounty.js');
 
 const fields = "`ba`.`ID`, `ba`.`UserID`, `ba`.`BountyID`, `ba`.`Proof`, `ba`.`DateAdded`, `ba`.`StatusID`";
 class BountyAttempt{

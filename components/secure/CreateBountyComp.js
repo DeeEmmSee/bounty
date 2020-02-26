@@ -47,7 +47,7 @@ class CreateBountyComp extends React.Component {
             obj.CreatedBy = cookieData.userId; 
             obj.CreatedDate = GetDBDate();
             obj.UpdatedDateTime = obj.createdDate;
-            obj.Image = "https://www.w3schools.com/bootstrap4/la.jpg"; // TODO
+            obj.Image = "https://via.placeholder.com/1200x500"; // TODO
             obj.MaxAttempts = Number(this.state.txtMaxAttempts);
 
             if (obj.MaxAttempts === NaN) {
