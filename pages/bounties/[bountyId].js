@@ -1,13 +1,13 @@
 import Layout from '../../components/Layout';
-import { GetBounty as GetBountyFunc, SaveNewBountyContribution as SaveNewContribFunc, SaveNewAttempt as SaveNewAttemptFunc } from '../../library/APIFunctions';
 import { withRouter } from 'next/router';
-import {ToReadableDateString, GetBountyStatus, GetDBDate, GetCookieData} from '../../library/common';
+import {ToReadableDateString, GetBountyStatus, GetDBDate, GetCookieData, GetAPIFunctions} from '../../library/common';
 
 class BountyPage extends React.Component {
     constructor(props){
         super(props);
 
         let cookieData = GetCookieData();
+        let api = GetAPIFunctions();
 
         this.state = {
             loaded: false,
@@ -20,7 +20,8 @@ class BountyPage extends React.Component {
             currentUserId: cookieData.userId,
             txtAttemptProof: "",
             errorMsgSubmitAttempt: "",
-            errorMsgContribution: ""
+            errorMsgContribution: "",
+            api: api
         };
 
         this.GetBounty(this.props.router.query.bountyId);
@@ -35,7 +36,7 @@ class BountyPage extends React.Component {
         this.state.loaded = false;
         let bountyPage = this;
 
-        GetBountyFunc(bountyId)
+        this.state.api.GetBounty(bountyId)
         .then(function(res) {
             bountyPage.setState((state) => { return {bounty: res.data, loaded: true} });
         })
@@ -69,7 +70,7 @@ class BountyPage extends React.Component {
             state.setState({errorMsgContribution: "Please enter a valid amount"});
         }
         else {
-            SaveNewContribFunc(contObj)
+            this.state.api.SaveNewBountyContribution(contObj)
             .then(res => {
                 // success
                 state.GetBounty(contObj.BountyID);
@@ -106,7 +107,7 @@ class BountyPage extends React.Component {
         obj.Proof = state.state.txtAttemptProof;
         obj.DateAdded = GetDBDate();
 
-        SaveNewAttemptFunc(obj)
+        this.state.api.SaveNewAttempt(obj)
         .then(res => {
             // success
             state.GetBounty(obj.BountyID);

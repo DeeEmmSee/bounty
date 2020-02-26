@@ -1,5 +1,4 @@
 import Link from 'next/link';
-import {GetBountyAttemptsByUser} from '../../../library/APIFunctions';
 import {ToReadableDateString, GetCookieData, GetAttemptStatus} from '../../../library/common';
 
 class MyAttemptsComp extends React.Component {
@@ -10,7 +9,8 @@ class MyAttemptsComp extends React.Component {
         this.state = {
             attempts: [],
             currentUserId: cookieData.userId,
-            loaded: false
+            loaded: false,
+            api: api
         };
 
         this.GetAttempts(true);
@@ -23,7 +23,7 @@ class MyAttemptsComp extends React.Component {
 
         let state = this;
 
-        GetBountyAttemptsByUser(this.state.currentUserId)
+        this.props.api.GetBountyAttemptsByUser(this.state.currentUserId)
         .then(res => {
             state.setState({loaded: true, attempts: res.data});
         })

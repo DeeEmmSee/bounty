@@ -1,11 +1,13 @@
 import React, { Component, Fragment } from "react";
-import { GetGameList as GameListFunc } from '../library/APIFunctions';
+import { GetAPIFunctions } from '../library/common';
 //import PropTypes from "prop-types";
 
 class GameList extends Component {
 
   constructor(props) {
     super(props);
+
+    let api = GetAPIFunctions();
 
     this.state = {
       // The active selection's index
@@ -17,7 +19,8 @@ class GameList extends Component {
       // What the user has entered
       userInput: "",
       suggestions: [],
-      selectedGame: {}
+      selectedGame: {},
+      api: api
     };
 
     this.GetGames();
@@ -27,7 +30,7 @@ class GameList extends Component {
     this.state.loaded = false;
     let ra = this;
 
-    GameListFunc()
+    this.state.api.GetGameList()
       .then(res => {
         ra.setState((state) => { return { suggestions: res.data, loaded: true } });
       })

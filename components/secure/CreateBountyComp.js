@@ -1,13 +1,15 @@
 import Link from 'next/link';
 import Layout from '../Layout';
 import GameList from '../GameList';
-import { SaveNewBounty as SaveNewBountyFunc, SaveNewBountyContribution as SaveNewBountyContFunc } from '../../library/APIFunctions';
 import config from '../../library/config';
 import { GetCookieData as CookieDataFunc, GetDBDate } from '../../library/common';
+import { GetAPIFunctions } from '../../library/common';
 
 class CreateBountyComp extends React.Component {
     constructor(props){
         super(props);
+
+        let api = GetAPIFunctions();
 
         this.state = {
             txtName: "",
@@ -21,7 +23,8 @@ class CreateBountyComp extends React.Component {
             showFormFields: true,
             showSuccess: false,
             newUrl: "",
-            disableAllowContributors: true
+            disableAllowContributors: true,
+            api: api
         };
 
         this.HandleInputChange = this.HandleInputChange.bind(this);
@@ -54,7 +57,7 @@ class CreateBountyComp extends React.Component {
                 obj.MaxAttempts = 0;
             }
 
-            SaveNewBountyFunc(obj)
+            this.state.api.SaveNewBounty(obj)
             .then(resp => {
                 var contObj = {};
                 contObj.BountyID = resp.data;
@@ -83,7 +86,7 @@ class CreateBountyComp extends React.Component {
     }
 
     SaveBountyContrib(state, contObj) {
-        SaveNewBountyContFunc(contObj)
+        state.api.SaveNewBountyContribution(contObj)
         .then(function(contResponse) {
             state.setState({showFormFields: false, showSuccess: true, newUrl: config.site_url + "/bounties/" + contObj.BountyID});
         })

@@ -1,4 +1,3 @@
-import {GetBounties} from '../../../library/APIFunctions';
 import {ToReadableDateString, GetCookieData, GetBountyStatus} from '../../../library/common';
 
 class MyBountiesComp extends React.Component {
@@ -27,7 +26,7 @@ class MyBountiesComp extends React.Component {
         obj.order = "CreatedDate";
         obj.orderDesc = true;
 
-        GetBounties(obj)
+        this.props.api.GetBounties(obj)
         .then(res => {
             state.setState({loaded: true, bounties: res.data});
 

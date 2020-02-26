@@ -1,17 +1,19 @@
 import Layout from '../../components/Layout';
-import { GetUser as GetUserFunc } from '../../library/APIFunctions';
 import { withRouter } from 'next/router';
-import {ToReadableDateString, GetDBDate, GetCookieData} from '../../library/common';
+import {ToReadableDateString, GetDBDate, GetCookieData, GetAPIFunctions} from '../../library/common';
+
 
 class ProfilePage extends React.Component {
     constructor(props){
         super(props);
 
         let cookieData = GetCookieData();
+        let api = GetAPIFunctions();
 
         this.state = {
             loaded: false,
-            user: {}
+            user: {},
+            api: api
         };
 
         this.GetUser(this.props.router.query.profile);
@@ -26,7 +28,7 @@ class ProfilePage extends React.Component {
         this.state.loaded = false;
         let profilePage = this;
 
-        GetUserFunc(profileId)
+        this.state.api.GetUser(profileId)
         .then(function(res) {
             profilePage.setState((state) => { return {user: res.data, loaded: true} });
         })

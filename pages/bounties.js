@@ -1,11 +1,12 @@
 import Layout from '../components/Layout';
 import GameList from '../components/GameList';
-import {GetBounties} from '../library/APIFunctions';
 import {ToReadableDateString} from '../library/common';
+import { GetAPIFunctions } from '../library/common';
 
 class Bounties extends React.Component {
     constructor(props){
         super(props);
+        let api = GetAPIFunctions();
 
         this.state = {
             loaded: false,
@@ -16,7 +17,8 @@ class Bounties extends React.Component {
             ddlStatus: "1",
             ddlOrderBy: "CreatedDate",
             orderByDesc: "DESC",
-            bountyList: []
+            bountyList: [],
+            api: api
         };
 
         this.HandleInputChange = this.HandleInputChange.bind(this);
@@ -43,7 +45,7 @@ class Bounties extends React.Component {
         obj.order = this.state.ddlOrderBy;
         obj.orderDesc = this.state.orderByDesc === "DESC";
 
-        GetBounties(obj)
+        this.state.api.GetBounties(obj)
         .then(res => {
             state.setState({loaded: true, bountyList: res.data});
         })

@@ -1,7 +1,6 @@
 /*import Link from 'next/link';
 import Layout from '../components/Layout';
 import GameList from '../components/GameList';
-import { SaveNewBounty as SaveNewBountyFunc, SaveNewBountyContribution as SaveNewBountyContFunc } from '../library/APIFunctions';
 import config from '../library/config';
 import { GetCookieData as CookieDataFunc, GetDBDate, IsLoggedIn } from '../library/common';*/
 

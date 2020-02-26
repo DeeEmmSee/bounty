@@ -1,6 +1,5 @@
 //import React from 'react';
 import Link from 'next/link';
-import { GetRecentlyClaimed as RecentlyClaimedFunc } from '../library/APIFunctions';
 import {ToReadableDateString} from '../library/common';
 
 class RecentlyClaimed extends React.Component {

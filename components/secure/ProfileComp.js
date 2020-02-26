@@ -4,13 +4,13 @@ import MyBountiesComp from "./profile/MyBountiesComp";
 import MyAttemptsComp from "./profile/MyAttemptsComp";
 import MyContributionsComp from "./profile/MyContributionsComp";
 import PreferencesComp from "./profile/PreferencesComp";
-import {GetProfileStats} from '../../library/APIFunctions';
-import {GetCookieData} from '../../library/common';
+import {GetCookieData, GetAPIFunctions} from '../../library/common';
 
 class ProfileComp extends React.Component {
     constructor(props){
         super(props);
         let cookieData = GetCookieData();
+        let api = GetAPIFunctions();
 
         this.state = {
             activeSection: "profile",
@@ -19,7 +19,8 @@ class ProfileComp extends React.Component {
             myAttempts: 0,
             myContributions: 0,
             currentUserId: cookieData.userId,
-            testShow: false
+            testShow: false,
+            api: api
         };
 
         //if (props.section !== undefined && props.section !== 'undefined') {
@@ -32,7 +33,7 @@ class ProfileComp extends React.Component {
     }
     
     PopulateStats() {
-        GetProfileStats(this.state.currentUserId)
+        this.state.api.GetProfileStats(this.state.currentUserId)
         .then(res => {
             this.setState({pendingAttempts: res.data.pendingAttempts, myBounties: res.data.myBounties, myAttempts: res.data.myAttempts, myContributions: res.data.myContributions});
         })
@@ -66,12 +67,12 @@ class ProfileComp extends React.Component {
                         </ul>
                     </div>
                     <div className="col-sm-9">
-                        { this.state.activeSection === "profile" && <ProfileOverviewComp /> }
-                        { this.state.activeSection === "pendingattempts" && <PendingAttemptsComp UpdateProfileStats={this.PopulateStats} /> }
-                        { this.state.activeSection === "mybounties" && <MyBountiesComp UpdateProfileStats={this.PopulateStats} /> }
-                        { this.state.activeSection === "myattempts" && <MyAttemptsComp /> }
-                        { this.state.activeSection === "mycontributions" && <MyContributionsComp UpdateProfileStats={this.PopulateStats} /> }
-                        { this.state.activeSection === "preferences" && <PreferencesComp /> }
+                        { this.state.activeSection === "profile" && <ProfileOverviewComp api={this.state.api} /> }
+                        { this.state.activeSection === "pendingattempts" && <PendingAttemptsComp UpdateProfileStats={this.PopulateStats} api={this.state.api} /> }
+                        { this.state.activeSection === "mybounties" && <MyBountiesComp UpdateProfileStats={this.PopulateStats} api={this.state.api} /> }
+                        { this.state.activeSection === "myattempts" && <MyAttemptsComp api={this.state.api} /> }
+                        { this.state.activeSection === "mycontributions" && <MyContributionsComp UpdateProfileStats={this.PopulateStats} api={this.state.api} /> }
+                        { this.state.activeSection === "preferences" && <PreferencesComp api={this.state.api} /> }
                     </div>
                 </div>
             </div>

@@ -1,4 +1,3 @@
-import {GetBounties, UpdateBountyAttempt} from '../../../library/APIFunctions';
 import {ToReadableDateString, GetCookieData, GetBountyStatus} from '../../../library/common';
 
 class PendingAttemptsComp extends React.Component {
@@ -31,7 +30,7 @@ class PendingAttemptsComp extends React.Component {
         obj.order = "Title";
         obj.orderDesc = false;
 
-        GetBounties(obj)
+        this.props.api.GetBounties(obj)
         .then(res => {
             state.setState({loaded: true, bounties: res.data});
 
@@ -74,7 +73,7 @@ class PendingAttemptsComp extends React.Component {
     UpdateAttempt(AttemptID, StatusID, BountyID){
         let state = this;
 
-        UpdateBountyAttempt(AttemptID, StatusID, BountyID)
+        this.props.api.UpdateBountyAttempt(AttemptID, StatusID, BountyID)
         .then(res => {
             // Update Bounties then set selected bounty
             this.GetBounties(false, BountyID);

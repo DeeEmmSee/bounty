@@ -1,4 +1,3 @@
-import {GetBountyContributionsByUser, SetBountyContributionAsPaid} from '../../../library/APIFunctions';
 import {ToReadableDateString, GetCookieData, GetBountyStatus} from '../../../library/common';
 
 class MyContributionsComp extends React.Component {
@@ -22,7 +21,7 @@ class MyContributionsComp extends React.Component {
 
         let state = this;
 
-        GetBountyContributionsByUser(this.state.currentUserId)
+        this.props.api.GetBountyContributionsByUser(this.state.currentUserId)
         .then(res => {
             state.setState({loaded: true, contributions: res.data});
 
@@ -40,7 +39,7 @@ class MyContributionsComp extends React.Component {
         state.setState({loaded: false});
 
         if (confirm("By clicking OK you are agreed that $" + contrib.Amount + " has successfully been paid to " + contrib.BountyClaimedBy + " and that this contribution can be closed")) {
-            SetBountyContributionAsPaid(contrib.ID, contrib.BountyID)
+            this.props.api.SetBountyContributionAsPaid(contrib.ID, contrib.BountyID)
             .then(res => {
                 state.GetContributions(false);
             })
