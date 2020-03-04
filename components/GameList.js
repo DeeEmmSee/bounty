@@ -40,6 +40,10 @@ class GameList extends Component {
       });
   }
 
+  clearGame = e => {
+    this.setState({userInput: "", selectedGame: {}, });
+  }
+
   // Event fired when the input value is changed
   onChange = e => {
     const { suggestions } = this.state;
@@ -158,14 +162,12 @@ class GameList extends Component {
 
     return (
       <Fragment>
-        <input
-          type="text"
-          onChange={onChange}
-          onKeyDown={onKeyDown}
-          value={userInput}
-          className="form-control"
-          placeholder="Start typing a game name..."
-        />
+        <div className="input-group">
+          <input type="text" onChange={onChange} onKeyDown={onKeyDown} value={userInput} className="form-control" placeholder="Start typing a game name..." />
+          <div className="input-group-prepend">
+            <button onClick={this.clearGame.bind(this)}>X</button>
+          </div>
+        </div>
         {suggestionsListComponent}
       </Fragment>
     );

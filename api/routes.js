@@ -21,20 +21,20 @@ module.exports = function(app, passport) {
         .get(bountyController.getFeatured);
         
     app.route('/api/bounties/bounty')
-        .get([passport.authenticate('jwt'), bountyController.getBounty])
+        .get([bountyController.getBounty])
         .post([passport.authenticate('jwt'), bountyController.createBounty])
         .patch([passport.authenticate('jwt'), bountyController.updateBounty]);
 
     app.route('/api/bounties/bounties')
-        .post([passport.authenticate('jwt'), bountyController.getBounties]);
+        .post([bountyController.getBounties]);
         
     app.route('/api/bounties/bountycontribution')
-        .get([passport.authenticate('jwt'), bountyController.getBountyContribution])
+        .get([bountyController.getBountyContribution])
         .post([passport.authenticate('jwt'), bountyController.createBountyContribution])
         .patch([passport.authenticate('jwt'), bountyController.setBountyContributionAsPaid, bountyController.checkBountyStatusAfterContribUpdate]);
 
     app.route('/api/bounties/bountyattempt')
-        .get([passport.authenticate('jwt'), bountyController.getBountyAttempts])
+        .get([bountyController.getBountyAttempts])
         .post([passport.authenticate('jwt'), bountyController.isValidBountyAttempt, bountyController.createBountyAttempt])
         .patch([passport.authenticate('jwt'), bountyController.updateBountyAttempt, bountyController.checkBountyStatusAfterAttemptUpdate]);
 

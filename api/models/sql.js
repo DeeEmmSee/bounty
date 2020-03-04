@@ -4,7 +4,7 @@ var mysql = require('mysql');
 var con = mysql.createConnection({
     host: "localhost",
 	user: "bounty",
-	password: "pN6gi0zHUExIS99D",
+	password: "pN6gi0zHUExIS99D!",
 	database: "bounty",
 	typeCast: function castField( field, useDefaultTypeCasting ) {
 

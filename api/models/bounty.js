@@ -2,7 +2,7 @@
 const sql = require('../models/sql.js');
 var BountyContribution = require('../models/bountycontribution.js');
 var BountyAttempt = require('../models/bountyattempt.js');
-var Game = require('../models/Game.js');
+var Game = require('../models/game.js');
 
 const fields = "b.`ID`, b.`GameID`, b.`Title`, b.`BountyCondition`, b.`Description`, b.`Image`, b.`Status`, b.`AllowContributors`, b.`Featured`, b.`CreatedBy`, b.`CreatedDate`, b.`ClaimedBy`, b.`ClaimedDate`, b.`UpdatedDateTime`, `b`.`MaxAttempts`";
 

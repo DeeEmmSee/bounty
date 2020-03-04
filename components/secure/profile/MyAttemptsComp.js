@@ -6,11 +6,11 @@ class MyAttemptsComp extends React.Component {
         super(props);
         let cookieData = GetCookieData();
 
+        let api = this.props
         this.state = {
             attempts: [],
             currentUserId: cookieData.userId,
-            loaded: false,
-            api: api
+            loaded: false
         };
 
         this.GetAttempts(true);
